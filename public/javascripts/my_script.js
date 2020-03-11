@@ -102,3 +102,17 @@ window.onkeydown = function( event ) {
         showInput();
     }
 };
+function redirect(clicked_id){
+    switch(clicked_id){
+        case "floods": 
+            alert(clicked_id);
+            break;
+        case "floods2":
+            alert(clicked_id); 
+            break; 
+        default:
+            console.log('Not an id');
+            break;   
+    }
+
+}

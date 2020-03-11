@@ -93,3 +93,17 @@ display: inline-block;
 .btn-container > button:hover{
 	background-color: #ccc;
 }
+
+.split-section {
+  height: 50vh;
+  background-color: aquamarine;
+  border: 1px solid black;
+  margin: auto;
+  line-height: 50vh;
+  text-align: center;
+  cursor: pointer;
+}
+
+.split-section:hover {
+  background-color: aquamarine;
+}

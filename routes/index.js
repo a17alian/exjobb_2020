@@ -3,7 +3,8 @@ var router = express.Router();
 var mongodb = require('mongodb');
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Map App' });
+  res.send('index', res);
 });
 
 router.get('/floods', function(req, res, next) {

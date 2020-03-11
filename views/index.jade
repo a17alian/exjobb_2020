@@ -1,5 +1,7 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  div(class='split-section' id='floods' onclick='redirect(this.id)')
+    h1 Leaflet
+  div(class='split-section' id='floods2' onclick='redirect(this.id)')
+    h1 OpenLayers
