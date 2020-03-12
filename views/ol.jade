@@ -1,0 +1,7 @@
+extends layout
+
+block content
+    ul
+    each flood, i in floods
+      li#flood_item
+        a(href='#') #{flood.country}
