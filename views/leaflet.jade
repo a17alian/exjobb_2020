@@ -1,8 +1,11 @@
 extends layout
 
-block content
+block content      
     #mapid
-        #fab-btn(onclick='showInput()') +
+    each flood, i in floods
+        script.
+            generateMarkers(#{flood.lat}, #{flood.long}, #{i});
+        #fab-btn +
         #fab-input   
             span#exit-btn X
             h2 Enter latitude and longitud coordinates
@@ -12,5 +15,4 @@ block content
                 button(type="submit", onclick='showInput(); panMap()') Go to coordinates
                 button(type="submit", onclick='showInput(); addMarker()') Confirm
                 button(type="submit", onclick='showInput(); clearMarkers()') Clear all markers
-
 

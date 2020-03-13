@@ -1,17 +1,31 @@
+
 // Map variables
 var mapboxUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWFsaWNlZWxpbiIsImEiOiJjazdhODdkaXcwd2diM2xvZ2RkaTZ0OWRiIn0.IFaMMoDYdmhfKPabfufJhA',
     mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
-var markers = L.layerGroup();
 
-var satellite = L.tileLayer(mapboxUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr}),
+var dbArray = [];
+
+    var satellite = L.tileLayer(mapboxUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr}),
     streets = L.tileLayer(mapboxUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr}),
     grayscale = L.tileLayer(mapboxUrl, {id: 'mapbox/light-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr})
-
 var map = L.map('mapid', {
     center: [58.587745, 16.192420999999968],
     zoom: 3,
     layers: [grayscale, markers, satellite]
 });
+
+function generateMarkers(lat, long, id, country){
+    var marker =marker;
+    marker += id;
+    marker =  L.marker([lat, long]).bindPopup(country);
+
+    dbArray.push(marker);
+    console.log(dbArray);
+    
+}
+var markers = L.layerGroup();
+
+
 var baseMaps = {
     "Grayscale": grayscale,
     "Streets": streets,
@@ -52,11 +66,9 @@ var markerArray = [];
 // Fetching saved markers in local storage
 function fetchMarkers(){
     var storedMarkers = JSON.parse(localStorage.getItem("markers"));
-    console.log("stored" + storedMarkers);
     for(key in storedMarkers) {
         if(storedMarkers.hasOwnProperty(key)) {
             var value = storedMarkers[key];
-            console.log(value['lat']);
             L.marker([value['lat'], value['lng']]).addTo(markers);
         }
     }
@@ -116,3 +128,4 @@ function redirect(clicked_id){
     }
 
 }
+
