@@ -19,11 +19,32 @@ var satellite = L.tileLayer(mapboxUrl, {id: 'mapbox/satellite-v9', tileSize: 512
 
 
 function generateMarkers(floods){
-    for(var i = 0; i < 10; i ++){
-        marker = L.marker([floods[i].lat, floods[i].long]);
+    for(var i = 0; i < 100; i ++){
+        marker = L.marker([floods[i].lat, floods[i].long]).bindPopup(
+            '<h3> ' + floods[i].country + ' </h3>' + 
+            'Main cause: ' +  floods[i].maincause + '<br>' + 
+            'Dead: ' + floods[i].dead + '<br>' + 
+            'Began: ' + floods[i].began + '<br>' + 
+            'Ended: ' + floods[i].ended);
         markers.addLayer(marker);    
     }
-    console.
+}
+
+function generateCircles(floods){
+    for(var i = 0; i < 100; i ++){
+        circle = L.circle([floods[i].lat, floods[i].long], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: floods[i].area
+        }).bindPopup(
+            '<h3> ' + floods[i].country + ' </h3>' + 
+            'Main cause: ' +  floods[i].maincause + '<br>' + 
+            'Dead: ' + floods[i].dead + '<br>' + 
+            'Began: ' + floods[i].began + '<br>' + 
+            'Ended: ' + floods[i].ended);
+        markers.addLayer(circle);    
+    }
 }
 
 var map = L.map('mapid', {
@@ -56,14 +77,23 @@ var drawMap = function(){
 
     L.control.layers(baseMaps, overlayMaps).addTo(map);
 }
-function onMapClick(e) {
-    popup
-        .setLatLng(e.latlng)
-        .setContent("Clicked coordinates: " + e.latlng.lat + ", " + e.latlng.lng)
-        .openOn(map);
-    document.getElementById("latVal").value = e.latlng.lat;
-    document.getElementById("lngVal").value = e.latlng.lng;
-}
+
+    function onMapClick(e) {
+        if(document.getElementById("fab-input").style.display == 'block'){
+            popup
+            .setLatLng(e.latlng)
+            .setContent("Clicked coordinates: " + e.latlng.lat + ", " + e.latlng.lng)
+            .openOn(map);
+            document.getElementById("latVal").value = e.latlng.lat;
+            document.getElementById("lngVal").value = e.latlng.lng;
+        
+        } else {
+            console.log('Cannot click map now');
+        }
+
+    }
+    
+
 
 map.on('click', onMapClick);
 

@@ -1,22 +1,27 @@
-extends layout
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src="https://code.jquery.com/jquery-3.4.1.js") 
+    link(rel='stylesheet', href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css")
+    script(src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js")
+body
+    block content
+        #mapid
+            #fab-btn(onclick='showInput()') +
+            #fab-input   
+                span#exit-btn(onclick='showInput()') X
+                h2 Enter latitude and longitud coordinates
+                input#latVal(type="text", placeholder="Enter latitude values or click map")
+                input#lngVal(type="text", placeholder="Enter longitude values or click map")
+                .btn-container
+                    button(type="submit", onclick='showInput(); panMap()') Go to coordinates
+                    button(type="submit", onclick='showInput(); addMarker()') Confirm
+                    button(type="submit", onclick='showInput(); clearMarkers()') Clear all markersç
 
-block content
-    #mapid
-        #fab-btn(onclick='showInput()') +
-        #fab-input   
-            span#exit-btn X
-            h2 Enter latitude and longitud coordinates
-            input#latVal(type="text", placeholder="Enter latitude values or click map")
-            input#lngVal(type="text", placeholder="Enter longitude values or click map")
-            .btn-container
-                button(type="submit", onclick='showInput(); panMap()') Go to coordinates
-                button(type="submit", onclick='showInput(); addMarker()') Confirm
-                button(type="submit", onclick='showInput(); clearMarkers()') Clear all markers
-
-  
-
-
-
+footer 
+    script(src='/javascripts/leaflet.js')
 
 
 

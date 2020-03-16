@@ -9,12 +9,12 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/leaflet', function(req, res, next) {
-  res.render('leaflet');
+  res.render('leaflet', {title: 'Leaflet Map'});
 
 });
 
 router.get('/openlayers', function(req, res, next) {
-  res.render('ol');
+  res.render('ol', {title: 'OpenLayers Map'});
 });
 
 module.exports = router;
