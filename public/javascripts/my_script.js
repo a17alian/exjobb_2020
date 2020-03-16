@@ -4,26 +4,30 @@ var mapboxUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_
     mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
 
 var dbArray = [];
+var markers = L.layerGroup();
 
-    var satellite = L.tileLayer(mapboxUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr}),
+var satellite = L.tileLayer(mapboxUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr}),
     streets = L.tileLayer(mapboxUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr}),
     grayscale = L.tileLayer(mapboxUrl, {id: 'mapbox/light-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr})
+
 var map = L.map('mapid', {
     center: [58.587745, 16.192420999999968],
     zoom: 3,
     layers: [grayscale, markers, satellite]
 });
 
-function generateMarkers(lat, long, id, country){
-    var marker =marker;
+function generateMarkers(array){
+    /*var marker =marker;
     marker += id;
-    marker =  L.marker([lat, long]).bindPopup(country);
+    marker =  L.marker([lat, long]);
 
     dbArray.push(marker);
-    console.log(dbArray);
+    console.log(lat);
+    */
+   console.log(array);
     
 }
-var markers = L.layerGroup();
+
 
 
 var baseMaps = {
@@ -37,7 +41,7 @@ var overlayMaps = {
 };
 var popup = L.popup();
 
-    var drawMap = function(){
+var drawMap = function(){
     L.tileLayer(mapboxUrl, {
         attribution: mbAttr,
         maxZoom: 18,
@@ -47,6 +51,7 @@ var popup = L.popup();
         accessToken: 'pk.eyJ1IjoiYWFsaWNlZWxpbiIsImEiOiJjazdhODdkaXcwd2diM2xvZ2RkaTZ0OWRiIn0.IFaMMoDYdmhfKPabfufJhA'
     
     }).addTo(map);
+
     L.control.layers(baseMaps, overlayMaps).addTo(map);
 }
 function onMapClick(e) {

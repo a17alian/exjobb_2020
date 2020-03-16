@@ -1,10 +1,7 @@
 extends layout
 
-block content      
+block content
     #mapid
-    each flood, i in floods
-        script.
-            generateMarkers(#{flood.lat}, #{flood.long}, #{i});
         #fab-btn +
         #fab-input   
             span#exit-btn X
@@ -15,4 +12,5 @@ block content
                 button(type="submit", onclick='showInput(); panMap()') Go to coordinates
                 button(type="submit", onclick='showInput(); addMarker()') Confirm
                 button(type="submit", onclick='showInput(); clearMarkers()') Clear all markers
-
+    script.
+        var resultArray = [];
