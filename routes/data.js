@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
   var MongoClient = mongodb.MongoClient;
   var url = 'mongodb://localhost:27017/test';
     
-  MongoClient.connect(url, function(err, db) {
+  MongoClient.connect(url,{useUnifiedTopology: true,useNewUrlParser: true,}, function(err, db) {
       if (err) throw err;
       var dbo = db.db("test");
       //Find all in the floods collection:

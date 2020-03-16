@@ -22,7 +22,7 @@ function generateMarkers(floods){
     for(var i = 0; i < 100; i ++){
         marker = L.marker([floods[i].lat, floods[i].long]).bindPopup(
             '<h3> ' + floods[i].country + ' </h3>' + 
-            'Main cause: ' +  floods[i].maincause + '<br>' + 
+            'Cause: ' +  floods[i].maincause + '<br>' + 
             'Dead: ' + floods[i].dead + '<br>' + 
             'Began: ' + floods[i].began + '<br>' + 
             'Ended: ' + floods[i].ended);
