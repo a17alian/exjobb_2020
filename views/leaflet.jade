@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    #mapid
+        #fab-btn +
+        #fab-input   
+            span#exit-btn X
+            h2 Enter latitude and longitud coordinates
+            input#latVal(type="text", placeholder="Enter latitude values or click map")
+            input#lngVal(type="text", placeholder="Enter longitude values or click map")
+            .btn-container
+                button(type="submit", onclick='showInput(); panMap()') Go to coordinates
+                button(type="submit", onclick='showInput(); addMarker()') Confirm
+                button(type="submit", onclick='showInput(); clearMarkers()') Clear all markers
+    script.
+        var resultArray = [];

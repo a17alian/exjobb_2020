@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    link(rel='stylesheet', href='/stylesheets/style.css')
+body
+  block content
+      ul
+      each flood, i in floods
+        li#flood_item(onclick='generateMarkers(#{flood.long})')
+          #{flood.lat} , #{flood.long}
+footer  
+    script(src='/javascripts/ol.js')
