@@ -2,7 +2,7 @@ extends layout
 
 block content
     #mapid
-        #fab-btn +
+        #fab-btn(onclick='showInput()') +
         #fab-input   
             span#exit-btn X
             h2 Enter latitude and longitud coordinates
@@ -12,5 +12,15 @@ block content
                 button(type="submit", onclick='showInput(); panMap()') Go to coordinates
                 button(type="submit", onclick='showInput(); addMarker()') Confirm
                 button(type="submit", onclick='showInput(); clearMarkers()') Clear all markers
-    script.
-        var resultArray = [];
+
+  
+
+
+
+
+
+
+
+
+
+
