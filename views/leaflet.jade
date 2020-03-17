@@ -3,7 +3,8 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src="https://code.jquery.com/jquery-3.4.1.js") 
+    script(src="https://code.jquery.com/jquery-3.4.1.js")
+    script(src='/javascripts/heatmap.js')     
     link(rel='stylesheet', href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css")
     script(src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js")
 body
@@ -20,8 +21,11 @@ body
                     button(type="submit", onclick='showInput(); addMarker()') Confirm
                     button(type="submit", onclick='showInput(); clearMarkers()') Clear all markers
 
-footer 
+footer
+    script(src="https://raw.githack.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js")  
     script(src='/javascripts/leaflet.js')
+
+    
 
 
 

@@ -24,8 +24,6 @@ var map = new ol.Map({
     })
 });
 
-var blur = document.getElementById('blur');
-var radius = document.getElementById('radius');
 
 var vector = new ol.layer.Heatmap({
   source: new ol.source.Vector({
@@ -34,8 +32,8 @@ var vector = new ol.layer.Heatmap({
       extractStyles: false
     })
   }),
-  blur: parseInt(blur.value, 10),
-  radius: parseInt(radius.value, 10),
+  blur: 10,
+  radius: 10,
   weight: function(feature) {
     // 2012_Earthquakes_Mag5.kml stores the magnitude of each earthquake in a
     // standards-violating <magnitude> tag in each Placemark.  We extract it from
