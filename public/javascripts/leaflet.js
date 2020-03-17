@@ -3,7 +3,7 @@ $.ajax({
     type: 'GET',
     dataType: 'json', // added data type
     success: function(res) {
-       generateMarkers(res);
+       generateCircles(res);
     }
 });
 // Map variables
@@ -19,7 +19,7 @@ var satellite = L.tileLayer(mapboxUrl, {id: 'mapbox/satellite-v9', tileSize: 512
 
 
 function generateMarkers(floods){
-    for(var i = 0; i < 100; i ++){
+    for(var i = 0; i < 500; i ++){
         marker = L.marker([floods[i].lat, floods[i].long]).bindPopup(
             '<h3> ' + floods[i].country + ' </h3>' + 
             'Cause: ' +  floods[i].maincause + '<br>' + 
@@ -31,7 +31,7 @@ function generateMarkers(floods){
 }
 
 function generateCircles(floods){
-    for(var i = 0; i < 100; i ++){
+    for(var i = 0; i < 500; i ++){
         circle = L.circle([floods[i].lat, floods[i].long], {
             color: 'red',
             fillColor: '#f03',
@@ -151,18 +151,4 @@ window.onkeydown = function( event ) {
         showInput();
     }
 };
-function redirect(clicked_id){
-    switch(clicked_id){
-        case "floods": 
-            alert(clicked_id);
-            break;
-        case "floods2":
-            alert(clicked_id); 
-            break; 
-        default:
-            console.log('Not an id');
-            break;   
-    }
-
-}
 

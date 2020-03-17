@@ -6,9 +6,12 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/css/ol.css' type='text/css')
     script(src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/build/ol.js") 
+    script(src="https://raw.githack.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js") 
     script(src="https://code.jquery.com/jquery-3.4.1.js") 
 
-block content
-  #map
+body
+  block content
+    div(class='map' id='map')
+      #popup
   script(src='/javascripts/ol.js')  
  
