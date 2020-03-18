@@ -7,33 +7,26 @@ $.ajax({
 
     }
 });
-function generateMarkers(floods){
-  for(var i = 0; i < 100; i ++){
-    heatmapObj[i] = {lat: floods[i].lat, lng: floods[i].long}
-    coordsData.data.push(heatmapObj[i]);
-}
 
-}
 var geojsonObject = {
   type: 'FeatureCollection',
   features: []
 };
-var marker = {
-  type: 'Feature',
-  geometry: {
-    type: 'Point',
-    coordinates: []
-  }
-};
-function toGeoJson(floods) {
 
+function toGeoJson(floods) {
+  var marker = {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: ''
+    }
+  };
 
   for(var i = 0; i < 100; i ++){
-    marker.coordinates =  floods[i].lat , floods[i].long;
-
-    geojsonObject.features.push(marker[i]);
+    marker.coordinates =  [floods[i].lat , floods[i].long];
+    geojsonObject.features.push(marker);
   }
-  console.log( geojsonObject.features);
+
   return geojsonObject;
 };
 console.log(geojsonObject);
