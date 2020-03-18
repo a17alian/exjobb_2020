@@ -19,38 +19,38 @@ var coordsData = {
 var satellite = L.tileLayer(mapboxUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr}),
     streets = L.tileLayer(mapboxUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr}),
     grayscale = L.tileLayer(mapboxUrl, {id: 'mapbox/light-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr})
-    heatmapObj = {};
-    var testData = {
-        max: 8,
-        data: [{lat: 24.6408, lng:46.7728},{lat: 50.75, lng:-1.55}]
-      };
-      var cfg = {
-        // radius should be small ONLY if scaleRadius is true (or small radius is intended)
-        // if scaleRadius is false it will be the constant radius used in pixels
-        "radius": 2,
-        "maxOpacity": .8,
-        // scales the radius based on map zoom
-        "scaleRadius": true,
-        // if set to false the heatmap uses the global maximum for colorization
-        // if activated: uses the data maximum within the current map boundaries
-        //   (there will always be a red spot with useLocalExtremas true)
-        "useLocalExtrema": true,
-        // which field name in your data represents the latitude - default "lat"
-        latField: 'lat',
-        // which field name in your data represents the longitude - default "lng"
-        lngField: 'lng',
-        // which field name in your data represents the data value - default "value"
-        valueField: 'count'
-    };
 
+heatmapObj = {};
+
+ var cfg = {
+    // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+    // if scaleRadius is false it will be the constant radius used in pixels
+    "radius": 15,
+    "maxOpacity": .5, 
+    // scales the radius based on map zoom
+    "scaleRadius": false, 
+    // if set to false the heatmap uses the global maximum for colorization
+    // if activated: uses the data maximum within the current map boundaries 
+    //   (there will always be a red spot with useLocalExtremas true)
+    "useLocalExtrema": true,
+    // which field name in your data represents the latitude - default "lat"
+    latField: 'lat',
+    // which field name in your data represents the longitude - default "lng"
+    lngField: 'lng',
+    // which field name in your data represents the data value - default "value"
+    valueField: 'count',
+    blur: 0.95
+  };
+  
 var heatmapLayer = new HeatmapOverlay(cfg);   
 
 function generateHeatmap(floods){
 
-    for(var i = 0; i < 2; i ++){
+    for(var i = 0; i < floods.length; i ++){
         heatmapObj[i] = {lat: floods[i].lat, lng: floods[i].long}
         coordsData.data.push(heatmapObj[i]);
     }
+    heatmapLayer.setData(coordsData);
 }
 
 function generateMarkers(floods){
@@ -87,9 +87,7 @@ var map = L.map('mapid', {
     zoom: 3,
     layers: [grayscale, markers, satellite, heatmapLayer]
 });
-console.log(coordsData);
-console.log(testData);
-heatmapLayer.setData(coordsData);
+
 
 var baseMaps = {
     "Heatmap": heatmapLayer,
