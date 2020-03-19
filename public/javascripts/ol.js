@@ -23,20 +23,33 @@ function toGeoJson(floods) {
   };
 
   for(var i = 0; i < 100; i ++){
-    marker.coordinates =  [floods[i].lat , floods[i].long];
+    marker.geometry.coordinates =  [floods[i].lat , floods[i].long];
     geojsonObject.features.push(marker);
   }
 
   return geojsonObject;
 };
 console.log(geojsonObject);
-// Create a heatmap layer based on GeoJSON content
+
+/*Create a heatmap layer based on GeoJSON content
 var heatmapLayer = new ol.layer.Heatmap({
   source: new ol.source.Vector({
-    features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
+    url: geojsonObject,
+    format: new ol.format.GeoJSON({ 
+      featureProjection: "EPSG:3857" 
+    })
   }),
   opacity: 0.9
 });
+*
+// Create a heatmap layer based on GeoJSON content
+  var heatmapLayer = new ol.layer.Heatmap({
+    source: new ol.source.Vector({
+      features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
+
+    }),
+      opacity: 0.9
+  });
 
 // Create a tile layer from OSM
 var osmLayer = new ol.layer.Tile({
@@ -54,3 +67,39 @@ var map = new ol.Map({
       zoom: 4
   })
 });
+*/
+data = new ol.source.Vector();
+
+map = new ol.Map({
+    target: 'map',
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.OSM()
+      })
+    ],
+    view: new ol.View({
+        center: ol.proj.transform([37.41, 8.82], 'EPSG:4326', 'EPSG:3857'),
+        zoom: 4
+    })
+});
+
+// created for owl range of data
+var coord = ol.proj.transform([37.41, 8.82], 'EPSG:4326', 'EPSG:3857');
+
+var lonLat = new ol.geom.Point(coord);
+
+var pointFeature = new ol.Feature({
+    geometry: lonLat,
+    weight: 20 // e.g. temperature
+});
+
+data.addFeature(pointFeature);
+
+// create the layer
+heatMapLayer = new ol.layer.Heatmap({
+    source: data,
+    radius: 50
+});
+
+// add to the map
+map.addLayer(heatMapLayer);
