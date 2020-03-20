@@ -45,6 +45,7 @@ heatmapObj = {};
 var heatmapLayer = new HeatmapOverlay(cfg);   
 
 function generateHeatmap(floods){
+
     for(var i = 0; i < floods.length; i ++){
         heatmapObj[i] = {lat: floods[i].lat, lng: floods[i].long}
         coordsData.data.push(heatmapObj[i]);
@@ -63,7 +64,6 @@ function generateMarkers(floods){
         markers.addLayer(marker);    
     }
 }
-
 function generateCircles(floods){
     for(var i = 0; i < 500; i ++){
         circle = L.circle([floods[i].lat, floods[i].long], {
