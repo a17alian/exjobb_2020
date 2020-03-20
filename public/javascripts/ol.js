@@ -73,25 +73,26 @@ var geojsonObject = {
   features: []
 };
 
-function toGeoJson(floods) {
-  var marker = {
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: ''
-    }
-  };
-
-  for(var i = 0; i < 100; i ++){
-    marker.geometry.coordinates =  [floods[i].lat , floods[i].long];
+var marker = {
+  type: 'Feature',
+  properties: {},
+  geometry: {
+    type: 'Point',
+    coordinates: ''
   }
-  geojsonObject.features.push(marker);
-  return geojsonObject;
 };
 
+function toGeoJson(floods) {
+  for(var i = 0; i < 100; i ++){
+    marker[i] = {type: 'Feature', properties: {}, geometry: {type: 'Point', coordinates: [floods[i].lat, floods[i].long] }}
+    geojsonObject.features.push(marker[i]);
+  }
+  return geojsonObject;
+};
 /*
+
 var vectorSource = new ol.source.Vector({
-  source: (new ol.format.GeoJSON()).readFeatures(testObj)
+  source: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
 });
 
 var vector = new ol.layer.Heatmap({
@@ -115,7 +116,7 @@ new ol.Map({
   })
 });
 */
-// Create a heatmap layer based on GeoJSON content
+//Create a heatmap layer based on GeoJSON content
      var heatmapLayer = new ol.layer.Heatmap({
       source: new ol.source.Vector({
         url: '../map.geojson',
@@ -127,7 +128,6 @@ new ol.Map({
       radius: 15
   });
 
-  console.log(heatmapLayer['source'])
   // Create a tile layer from OSM
   var osmLayer = new ol.layer.Tile({
       source: new ol.source.OSM()
@@ -144,4 +144,3 @@ new ol.Map({
           zoom: 4
       })
   });
-
