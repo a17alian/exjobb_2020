@@ -1,3 +1,4 @@
+
 $.ajax({
     url: "http://localhost:3000/data",
     type: 'GET',
@@ -16,10 +17,10 @@ var testObj = {
       "properties": {},
       "geometry": {
         "type": "Point",
-        "coordinates": [
+        "coordinates": ol.proj.fromLonLat([
           40.60546875,
           56.601838481314694
-        ]
+        ])
       }
     },
     {
@@ -27,10 +28,10 @@ var testObj = {
       "properties": {},
       "geometry": {
         "type": "Point",
-        "coordinates": [
+        "coordinates": ol.proj.fromLonLat([
           12.7001953125,
           62.08331486294795
-        ]
+        ])
       }
     },
     {
@@ -38,10 +39,10 @@ var testObj = {
       "properties": {},
       "geometry": {
         "type": "Point",
-        "coordinates": [
+        "coordinates": ol.proj.fromLonLat([
           7.646484374999999,
           52.482780222078226
-        ]
+        ])
       }
     },
     {
@@ -49,10 +50,10 @@ var testObj = {
       "properties": {},
       "geometry": {
         "type": "Point",
-        "coordinates": [
+        "coordinates": ol.proj.fromLonLat([
           21.09375,
           65.83877570688918
-        ]
+        ])
       }
     },
     {
@@ -60,10 +61,10 @@ var testObj = {
       "properties": {},
       "geometry": {
         "type": "Point",
-        "coordinates": [
+        "coordinates": ol.proj.fromLonLat([
           23.5546875,
           63.78248603116502
-        ]
+        ])
       }
     }
   ]
@@ -74,22 +75,22 @@ var geojsonObject = {
 };
 
 var marker = {
-  'type': 'Feature',
-  'properties': {},
-  'geometry': {
-    'type': 'Point',
-    'coordinates': ''
+  type: 'Feature',
+  properties: {},
+  geometry: {
+    type: 'Point',
+    coordinates: "",
   }
 };
-
 function toGeoJson(floods) {
   for(var i = 0; i < 5; i ++){
-    marker[i] = {type: 'Feature', properties: {}, geometry: {type: 'Point', coordinates: [floods[i].lat, floods[i].long] }}
+    marker[i] = {type: 'Feature', properties: {}, geometry: {type: 'Point', coordinates: ol.proj.fromLonLat([floods[i].long, floods[i].lat]) }}
     geojsonObject.features.push(marker[i]);
   }
   return geojsonObject;
 };
-
+ console.log(geojsonObject);
+ console.log(testObj);
 /*
 var vectorSource = new ol.source.Vector({
   features: new ol.format.GeoJSON().readFeatures(geojsonObject,{
@@ -118,12 +119,12 @@ new ol.Map({
   })
 });
 */
-//Create a heatmap layer based on GeoJSON content
+/*Create a heatmap layer based on GeoJSON content
      var heatmapLayer = new ol.layer.Heatmap({
       source: new ol.source.Vector({
         url: '../map.geojson',
         projection: 'EPSG:3857',
-        format: new ol.format.GeoJSON()
+        format: new ol.format.GeoJSON({extractStyles: false})
       }),
       opacity: 0.95,
       blur: 10,
@@ -142,7 +143,44 @@ new ol.Map({
       layers: [osmLayer, heatmapLayer],
       // Create a view centered on the specified location and zoom level
       view: new ol.View({
-          center: ol.proj.transform([2.1833, 41.3833], 'EPSG:4326', 'EPSG:3857'),
-          zoom: 4
+          center: [58.39118, 13.84506],
+          zoom: 3
       })
   });
+
+
+  map.on('pointermove', function(evt) {
+    if (evt.dragging) {
+    }
+  });
+  */
+
+
+
+  // Map
+var map = new ol.Map({
+  layers: [
+    new ol.layer.Tile({
+      source: new ol.source.OSM()
+    }),
+  ],
+  target: 'map',
+  view: new ol.View({
+    center: ol.proj.transform([58.39118, 13.84506], 'EPSG:4326', 'EPSG:3857'),
+    zoom: 2
+  })
+});
+var vectorSource = new ol.source.Vector({
+  features: (new ol.format.GeoJSON()).readFeatures(testObj),
+  projection: 'EPSG:3857'
+});
+
+
+// create the layer
+heatMapLayer = new ol.layer.Heatmap({
+   source: vectorSource,
+   radius: 15
+});
+
+// add to the map
+map.addLayer(heatMapLayer);
