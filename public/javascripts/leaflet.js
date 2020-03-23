@@ -5,6 +5,7 @@ $.ajax({
     dataType: 'json', // added data type
     success: function(res) {
        generateHeatmap(res);
+       generateMarkers(res);
     }
 });
 // Map variables
@@ -54,8 +55,9 @@ function generateHeatmap(floods){
     heatmapLayer.setData(coordsData);
 }
 
+
 function generateMarkers(floods){
-    for(var i = 0; i < 500; i ++){
+    for(var i = 0; i < floods.length; i ++){
         marker = L.marker([floods[i].lat, floods[i].long]).bindPopup(
             '<h3> ' + floods[i].country + ' </h3>' + 
             'Cause: ' +  floods[i].maincause + '<br>' + 
@@ -66,12 +68,12 @@ function generateMarkers(floods){
     }
 }
 function generateCircles(floods){
-    for(var i = 0; i < 500; i ++){
+    for(var i = 0; i < floods.length; i ++){
         circle = L.circle([floods[i].lat, floods[i].long], {
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 0.5,
-            radius: floods[i].area
+            radius: 15
         }).bindPopup(
             '<h3> ' + floods[i].country + ' </h3>' + 
             'Main cause: ' +  floods[i].maincause + '<br>' + 
@@ -85,15 +87,15 @@ function generateCircles(floods){
 var map = L.map('mapid', {
     center: [58.587745, 16.192420999999968],
     zoom: 3,
-    layers: [grayscale, markers, satellite, heatmapLayer]
+    layers: [streets]
 });
 
 
 var baseMaps = {
-    "Heatmap": heatmapLayer,
-    "Grayscale": grayscale,
     "Streets": streets,
-    "Satellite":satellite
+    "Grayscale": grayscale,
+    "Satellite":satellite,
+    "Heatmap": heatmapLayer,
 };
 
 var overlayMaps = {
