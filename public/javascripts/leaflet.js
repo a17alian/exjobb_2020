@@ -1,3 +1,4 @@
+// Fetching data from mongoDB with AJAX
 $.ajax({
     url: "http://localhost:3000/data",
     type: 'GET',

@@ -5,11 +5,6 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
 
 body
-  block content
-    div(class='split-section' id='leaflet' onclick='redirect(this.id)')
-      h1 Leaflet
-    div(class='split-section' id='openlayers' onclick='redirect(this.id)')
-      h1 OpenLayers
   script. 
     function redirect(clicked_id){
         switch(clicked_id){
@@ -24,3 +19,8 @@ body
                 break;   
         }
     }
+  block content
+    div(class='split-section' id='leaflet' onclick='redirect(this.id)')
+      h1 Leaflet
+    div(class='split-section' id='openlayers' onclick='redirect(this.id)')
+      h1 OpenLayers
