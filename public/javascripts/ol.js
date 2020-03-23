@@ -74,25 +74,27 @@ var geojsonObject = {
 };
 
 var marker = {
-  type: 'Feature',
-  properties: {},
-  geometry: {
-    type: 'Point',
-    coordinates: ''
+  'type': 'Feature',
+  'properties': {},
+  'geometry': {
+    'type': 'Point',
+    'coordinates': ''
   }
 };
 
 function toGeoJson(floods) {
-  for(var i = 0; i < 100; i ++){
+  for(var i = 0; i < 5; i ++){
     marker[i] = {type: 'Feature', properties: {}, geometry: {type: 'Point', coordinates: [floods[i].lat, floods[i].long] }}
     geojsonObject.features.push(marker[i]);
   }
   return geojsonObject;
 };
-/*
 
+/*
 var vectorSource = new ol.source.Vector({
-  source: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
+  features: new ol.format.GeoJSON().readFeatures(geojsonObject,{
+    featureProjection: 'EPSG:3857'
+})
 });
 
 var vector = new ol.layer.Heatmap({
