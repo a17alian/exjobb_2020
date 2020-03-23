@@ -1,12 +1,17 @@
 doctype html
 html
   head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/ol.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/css/ol.css' type='text/css')
+    script(src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/build/ol.js") 
+    script(src="https://code.jquery.com/jquery-3.4.1.js") 
+
 body
   block content
-      ul
-      each flood, i in floods
-        li#flood_item(onclick='generateMarkers(#{flood.long})')
-          #{flood.lat} , #{flood.long}
-footer  
-    script(src='/javascripts/ol.js')
+    div(class='map' id='map')
+      #popup
+    #info  
+  script(src='/javascripts/ol.js')  
+ 

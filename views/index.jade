@@ -1,7 +1,26 @@
-extends layout
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
 
-block content
-  div(class='split-section' id='floods' onclick='redirect(this.id)')
-    h1 Leaflet
-  div(class='split-section' id='floods2' onclick='redirect(this.id)')
-    h1 OpenLayers
+body
+  block content
+    div(class='split-section' id='leaflet' onclick='redirect(this.id)')
+      h1 Leaflet
+    div(class='split-section' id='openlayers' onclick='redirect(this.id)')
+      h1 OpenLayers
+  script. 
+    function redirect(clicked_id){
+        switch(clicked_id){
+            case "leaflet": 
+            window.location.replace(window.location.href + 'leaflet');
+                break;
+            case "openlayers":
+                window.location.replace(window.location.href + 'openlayers');
+                break; 
+            default:
+                console.log('Not an id');
+                break;   
+        }
+    }
