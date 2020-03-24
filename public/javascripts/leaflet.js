@@ -83,16 +83,16 @@ function generateCircles(floods){
 
 var map = L.map('mapid', {
     center: [58.39118, 13.84506],
-    zoom: 3,
-    layers: [streets]
+    zoom: 5,
+    layers: [heatmapLayer]
 });
 
 
 var baseMaps = {
+    "Heatmap": heatmapLayer,
     "Streets": streets,
     "Grayscale": grayscale,
     "Satellite":satellite,
-    "Heatmap": heatmapLayer,
 };
 
 var overlayMaps = {
