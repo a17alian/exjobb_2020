@@ -4,8 +4,7 @@ $.ajax({
     type: 'GET',
     dataType: 'json', // added data type
     success: function(res) {
-        toGeoJson(res);
-
+      toGeoJson(res);
     }
 });
 var testObj = {
@@ -17,8 +16,8 @@ var testObj = {
       "geometry": {
         "type": "Point",
         "coordinates": ol.proj.fromLonLat([
-          40.60546875,
-          56.601838481314694
+          5.230257,
+          35.814242
         ])
       }
     },
@@ -28,8 +27,8 @@ var testObj = {
       "geometry": {
         "type": "Point",
         "coordinates": ol.proj.fromLonLat([
-          12.7001953125,
-          62.08331486294795
+          32.349078
+          -25.869263
         ])
       }
     },
@@ -39,8 +38,8 @@ var testObj = {
       "geometry": {
         "type": "Point",
         "coordinates": ol.proj.fromLonLat([
-          7.646484374999999,
-          52.482780222078226
+          32.349078,
+          -25.869263
         ])
       }
     },
@@ -50,8 +49,8 @@ var testObj = {
       "geometry": {
         "type": "Point",
         "coordinates": ol.proj.fromLonLat([
-          21.09375,
-          65.83877570688918
+          122.97428,
+          10.020719
         ])
       }
     },
@@ -61,56 +60,65 @@ var testObj = {
       "geometry": {
         "type": "Point",
         "coordinates": ol.proj.fromLonLat([
-          23.5546875,
-          63.78248603116502
+          43.359976,
+          -11.651576
         ])
       }
     }
   ]
 };
 var geojsonObject = {
-  type: 'FeatureCollection',
-  features: []
+  "type": "FeatureCollection",
+  "features": []
 };
 
 var marker = {
-  type: 'Feature',
-  properties: {},
-  geometry: {
-    type: 'Point',
-    coordinates: "",
+  "type": "Feature",
+  "properties": {},
+  "geometry": {
+    "type": "Point",
+    "coordinates": "",
   }
 };
+
 function toGeoJson(floods) {
-  for(var i = 0; i < 5; i ++){
-    marker[i] = {type: 'Feature', properties: {}, geometry: {type: 'Point', coordinates: ol.proj.fromLonLat([floods[i].long, floods[i].lat]) }}
+  for(var i = 0; i < floods.length; i ++){
+    marker[i] = {type: 'Feature', properties: {}, geometry: { type: 'Point', coordinates: ol.proj.fromLonLat([floods[i].long, floods[i].lat])}};
     geojsonObject.features.push(marker[i]);
   }
-  return geojsonObject;
+  return geojsonObject
 };
- console.log(geojsonObject);
- console.log(testObj);
 
-var vectorSource = new ol.source.Vector({
-  features: new ol.format.GeoJSON().readFeatures(testObj)
-});
+setTimeout(function(){
+  var vectorSource =  new ol.source.Vector({
+    features: new ol.format.GeoJSON().readFeatures(geojsonObject)
+  });
+  var vector = new ol.layer.Heatmap({
+    source: vectorSource,
+    opacity: 0.5,
+    weight: 0.2
 
-var vector = new ol.layer.Heatmap({
-  source: vectorSource,
-  radius: 15
-});
+  });
+  
+  var raster = new ol.layer.Tile({
+    source: new ol.source.OSM()
+  });
+  
+  new ol.Map({
+    layers: [raster, vector],
+    target: 'map',
+    view: new ol.View({
+      center: ol.proj.fromLonLat([58.39118, 13.84506]),
+      zoom: 3
+    })
+  });
+  
+ }, 200);
 
-var raster = new ol.layer.Tile({
-  source: new ol.source.OSM({
-    layer: 'toner'
-  })
-});
 
-new ol.Map({
-  layers: [raster, vector],
-  target: 'map',
-  view: new ol.View({
-    center: [0, 0],
-    zoom: 2
-  })
-});
+
+
+
+
+
+
