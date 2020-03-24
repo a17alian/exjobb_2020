@@ -7,66 +7,7 @@ $.ajax({
       toGeoJson(res);
     }
 });
-var testObj = {
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": ol.proj.fromLonLat([
-          5.230257,
-          35.814242
-        ])
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": ol.proj.fromLonLat([
-          32.349078
-          -25.869263
-        ])
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": ol.proj.fromLonLat([
-          32.349078,
-          -25.869263
-        ])
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": ol.proj.fromLonLat([
-          122.97428,
-          10.020719
-        ])
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": ol.proj.fromLonLat([
-          43.359976,
-          -11.651576
-        ])
-      }
-    }
-  ]
-};
+
 var geojsonObject = {
   "type": "FeatureCollection",
   "features": []
