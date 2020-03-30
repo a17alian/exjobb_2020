@@ -37,7 +37,8 @@ setTimeout(function(){
   var vector = new ol.layer.Heatmap({
     source: vectorSource,
     radius: 12,
-    opacity: 0.6
+    opacity: 0.6,
+
   });
   
   var raster = new ol.layer.Tile({
@@ -48,7 +49,7 @@ setTimeout(function(){
     layers: [raster, vector],
     target: 'map',
     view: new ol.View({
-      center: ol.proj.fromLonLat([13.84506, 58.39118]),
+      center: ol.proj.fromLonLat([13.404954, 52.520008]),
       zoom: 5
     })
   });

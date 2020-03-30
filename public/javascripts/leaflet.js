@@ -3,7 +3,12 @@ $.ajax({
     url: "http://localhost:3000/data",
     type: 'GET',
     dataType: 'json', // added data type
-    success: function(res) {
+    beforeSend: function(){
+         // get time before GET
+         let get_time = Date.now();
+         localStorage.setItem("get_time", get_time);
+
+    },success: function(res) {
        generateHeatmap(res);
        generateMarkers(res);
     }
@@ -52,7 +57,24 @@ function generateHeatmap(floods){
         coordsData.data.push(heatmapObj[i]);
     }
     heatmapLayer.setData(coordsData);
+    var end_time = Date.now();
+
+    var stored_time = localStorage.getItem("get_time");
+    var measurement = (end_time -  stored_time);
+    let array_data = JSON.parse(localStorage.getItem("scrapedData"))  || [];
+
+    array_data.push(Math.round(measurement));
+    localStorage.setItem("scrapedData", JSON.stringify(array_data));
+
+    console.log(localStorage.getItem("scrapedData"));
+
+
 }
+
+function measurement(){
+
+}
+
 function generateMarkers(floods){
     for(var i = 0; i < floods.length; i ++){
         marker = L.marker([floods[i].lat, floods[i].long]).bindPopup(
@@ -82,7 +104,7 @@ function generateCircles(floods){
 }
 
 var map = L.map('mapid', {
-    center: [58.39118, 13.84506],
+    center: [52.520008, 13.404954],
     zoom: 5,
     layers: [heatmapLayer]
 });
@@ -114,21 +136,7 @@ var drawMap = function(){
     L.control.layers(baseMaps, overlayMaps).addTo(map);
 }
 
-function onMapClick(e) {
-    if(document.getElementById("fab-input").style.display == 'block'){
-        popup
-        .setLatLng(e.latlng)
-        .setContent("Clicked coordinates: " + e.latlng.lat + ", " + e.latlng.lng)
-        .openOn(map);
-        document.getElementById("latVal").value = e.latlng.lat;
-        document.getElementById("lngVal").value = e.latlng.lng;
-    
-    } else {
-        console.log('Cannot click map now');
-    }
-}
-    
-map.on('click', onMapClick);
+
 
 drawMap();
 
@@ -155,3 +163,13 @@ window.onkeydown = function( event ) {
     }
 };
 
+function postAjax(){
+    $.ajax({
+        url: "https://wwwlab.iit.his.se/a17alian/exjobb_2020/scraped_receiver.php",
+        type: 'POST',
+        data: 'str=' + encodeURIComponent(data),
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+    });
+}
