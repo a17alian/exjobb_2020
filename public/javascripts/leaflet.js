@@ -1,3 +1,4 @@
+let array_data = JSON.parse(localStorage.getItem("scrapedData"))  || [];
 // Fetching data from mongoDB with AJAX
 $.ajax({
     url: "http://localhost:3000/data",
@@ -51,6 +52,24 @@ heatmapObj = {};
   
 var heatmapLayer = new HeatmapOverlay(cfg);   
 
+
+function reload(end_time){
+        if(array_data.length < 10){   
+            var stored_time = localStorage.getItem("get_time");
+            var measurement = (end_time -  stored_time);
+
+            array_data.push(Math.round(measurement));
+            localStorage.setItem("scrapedData", JSON.stringify(array_data));
+            
+            postAjax(array_data);
+            console.log(array_data);
+ 
+        } else{
+            console.log('Data sent, localstorage cleared');
+            localStorage.clear();
+        }
+
+}
 function generateHeatmap(floods){
     for(var i = 0; i < floods.length; i ++){
         heatmapObj[i] = {lat: floods[i].lat, lng: floods[i].long}
@@ -58,22 +77,9 @@ function generateHeatmap(floods){
     }
     heatmapLayer.setData(coordsData);
     var end_time = Date.now();
-
-    var stored_time = localStorage.getItem("get_time");
-    var measurement = (end_time -  stored_time);
-    let array_data = JSON.parse(localStorage.getItem("scrapedData"))  || [];
-
-    array_data.push(Math.round(measurement));
-    localStorage.setItem("scrapedData", JSON.stringify(array_data));
-
-    console.log(localStorage.getItem("scrapedData"));
-
-
+    reload(end_time);
 }
 
-function measurement(){
-
-}
 
 function generateMarkers(floods){
     for(var i = 0; i < floods.length; i ++){
@@ -163,9 +169,9 @@ window.onkeydown = function( event ) {
     }
 };
 
-function postAjax(){
+function postAjax(data){
     $.ajax({
-        url: "https://wwwlab.iit.his.se/a17alian/exjobb_2020/scraped_receiver.php",
+        url: "https://wwwlab.iit.his.se/a17alian/exjobb_2020/leaflet/scraped_receiver.php",
         type: 'POST',
         data: 'str=' + encodeURIComponent(data),
         headers: {
