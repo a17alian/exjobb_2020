@@ -1,9 +1,16 @@
+// Fetching data from mongoDB with AJAX
 $.ajax({
     url: "http://localhost:3000/data",
     type: 'GET',
     dataType: 'json', // added data type
-    success: function(res) {
+    beforeSend: function(){
+         // get time before GET
+         let get_time = Date.now();
+         localStorage.setItem("get_time", get_time);
+
+    },success: function(res) {
        generateHeatmap(res);
+       generateMarkers(res);
     }
 });
 // Map variables
@@ -45,16 +52,31 @@ heatmapObj = {};
 var heatmapLayer = new HeatmapOverlay(cfg);   
 
 function generateHeatmap(floods){
-
     for(var i = 0; i < floods.length; i ++){
         heatmapObj[i] = {lat: floods[i].lat, lng: floods[i].long}
         coordsData.data.push(heatmapObj[i]);
     }
     heatmapLayer.setData(coordsData);
+    var end_time = Date.now();
+
+    var stored_time = localStorage.getItem("get_time");
+    var measurement = (end_time -  stored_time);
+    let array_data = JSON.parse(localStorage.getItem("scrapedData"))  || [];
+
+    array_data.push(Math.round(measurement));
+    localStorage.setItem("scrapedData", JSON.stringify(array_data));
+
+    console.log(localStorage.getItem("scrapedData"));
+
+
+}
+
+function measurement(){
+
 }
 
 function generateMarkers(floods){
-    for(var i = 0; i < 500; i ++){
+    for(var i = 0; i < floods.length; i ++){
         marker = L.marker([floods[i].lat, floods[i].long]).bindPopup(
             '<h3> ' + floods[i].country + ' </h3>' + 
             'Cause: ' +  floods[i].maincause + '<br>' + 
@@ -65,12 +87,12 @@ function generateMarkers(floods){
     }
 }
 function generateCircles(floods){
-    for(var i = 0; i < 500; i ++){
+    for(var i = 0; i < floods.length; i ++){
         circle = L.circle([floods[i].lat, floods[i].long], {
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 0.5,
-            radius: floods[i].area
+            radius: 15
         }).bindPopup(
             '<h3> ' + floods[i].country + ' </h3>' + 
             'Main cause: ' +  floods[i].maincause + '<br>' + 
@@ -82,17 +104,17 @@ function generateCircles(floods){
 }
 
 var map = L.map('mapid', {
-    center: [58.587745, 16.192420999999968],
-    zoom: 3,
-    layers: [grayscale, markers, satellite, heatmapLayer]
+    center: [52.520008, 13.404954],
+    zoom: 5,
+    layers: [heatmapLayer]
 });
 
 
 var baseMaps = {
     "Heatmap": heatmapLayer,
-    "Grayscale": grayscale,
     "Streets": streets,
-    "Satellite":satellite
+    "Grayscale": grayscale,
+    "Satellite":satellite,
 };
 
 var overlayMaps = {
@@ -112,56 +134,12 @@ var drawMap = function(){
     }).addTo(map);
 
     L.control.layers(baseMaps, overlayMaps).addTo(map);
- 
 }
 
-    function onMapClick(e) {
-        if(document.getElementById("fab-input").style.display == 'block'){
-            popup
-            .setLatLng(e.latlng)
-            .setContent("Clicked coordinates: " + e.latlng.lat + ", " + e.latlng.lng)
-            .openOn(map);
-            document.getElementById("latVal").value = e.latlng.lat;
-            document.getElementById("lngVal").value = e.latlng.lng;
-        
-        } else {
-            console.log('Cannot click map now');
-        }
 
-    }
-    
-
-
-map.on('click', onMapClick);
 
 drawMap();
 
-var markerArray = [];
-// Fetching saved markers in local storage
-function fetchMarkers(){
-    var storedMarkers = JSON.parse(localStorage.getItem("markers"));
-    for(key in storedMarkers) {
-        if(storedMarkers.hasOwnProperty(key)) {
-            var value = storedMarkers[key];
-            L.marker([value['lat'], value['lng']]).addTo(markers);
-        }
-    }
-}
-
-function saveMarker(newMarker){
-    markerArray.push(newMarker.getLatLng());
-   localStorage.setItem("markers", JSON.stringify(markerArray));
-} 
-
-function addMarker(){
-    var lat = document.getElementById("latVal").value;
-    var lng = document.getElementById("lngVal").value;
-    map.panTo([lat, lng]);
-    saveMarker(L.marker([lat, lng]).addTo(markers));
-    lat = "";
-    lng = "";
-
-}
 function panMap(){
     var lat = document.getElementById("latVal").value;
     var lng = document.getElementById("lngVal").value;
@@ -177,11 +155,7 @@ function showInput(){
     }
 }
 
-function clearMarkers(){
-    window.localStorage.clear();
-   markers.clearLayers();
-   location.reload();
-}
+
 // Close window in esc press
 window.onkeydown = function( event ) {
     if ( event.keyCode == 27 ) {
@@ -189,3 +163,13 @@ window.onkeydown = function( event ) {
     }
 };
 
+function postAjax(){
+    $.ajax({
+        url: "https://wwwlab.iit.his.se/a17alian/exjobb_2020/scraped_receiver.php",
+        type: 'POST',
+        data: 'str=' + encodeURIComponent(data),
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+    });
+}
