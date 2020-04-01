@@ -1,4 +1,5 @@
 let array_data = JSON.parse(localStorage.getItem("scrapedData"))  || [];
+
 // Fetching data from mongoDB with AJAX
 $.ajax({
     url: "http://localhost:3000/data",
@@ -8,7 +9,6 @@ $.ajax({
          // get time before GET
          let get_time = Date.now();
          localStorage.setItem("get_time", get_time);
-
     },success: function(res) {
        generateHeatmap(res);
        generateMarkers(res);
@@ -52,8 +52,7 @@ heatmapObj = {};
   
 var heatmapLayer = new HeatmapOverlay(cfg);   
 
-
-function reload(end_time){
+function print_time(end_time){
         if(array_data.length < 10){   
             var stored_time = localStorage.getItem("get_time");
             var measurement = (end_time -  stored_time);
@@ -61,15 +60,16 @@ function reload(end_time){
             array_data.push(Math.round(measurement));
             localStorage.setItem("scrapedData", JSON.stringify(array_data));
             
-            postAjax(array_data);
             console.log(array_data);
+            document.getElementById('data').innerHTML = array_data;
+            document.getElementById('load_time').innerHTML = 'Load times [' + array_data.length + ']';
  
         } else{
-            console.log('Data sent, localstorage cleared');
+            console.log('Data finished');
             localStorage.clear();
         }
-
 }
+
 function generateHeatmap(floods){
     for(var i = 0; i < floods.length; i ++){
         heatmapObj[i] = {lat: floods[i].lat, lng: floods[i].long}
@@ -77,9 +77,8 @@ function generateHeatmap(floods){
     }
     heatmapLayer.setData(coordsData);
     var end_time = Date.now();
-    reload(end_time);
+    print_time(end_time);
 }
-
 
 function generateMarkers(floods){
     for(var i = 0; i < floods.length; i ++){
@@ -115,7 +114,6 @@ var map = L.map('mapid', {
     layers: [heatmapLayer]
 });
 
-
 var baseMaps = {
     "Heatmap": heatmapLayer,
     "Streets": streets,
@@ -136,13 +134,10 @@ var drawMap = function(){
         tileSize: 512,
         zoomOffset: -1,
         accessToken: 'pk.eyJ1IjoiYWFsaWNlZWxpbiIsImEiOiJjazdhODdkaXcwd2diM2xvZ2RkaTZ0OWRiIn0.IFaMMoDYdmhfKPabfufJhA'
-    
     }).addTo(map);
 
     L.control.layers(baseMaps, overlayMaps).addTo(map);
 }
-
-
 
 drawMap();
 
@@ -168,14 +163,3 @@ window.onkeydown = function( event ) {
         showInput();
     }
 };
-
-function postAjax(data){
-    $.ajax({
-        url: "https://wwwlab.iit.his.se/a17alian/exjobb_2020/leaflet/scraped_receiver.php",
-        type: 'POST',
-        data: 'str=' + encodeURIComponent(data),
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-    });
-}
