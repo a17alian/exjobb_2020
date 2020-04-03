@@ -34,7 +34,7 @@ setTimeout(function(){
   var vectorSource =  new ol.source.Vector({
     features: new ol.format.GeoJSON().readFeatures(geojsonObject)
   });
-  var vector = new ol.layer.Heatmap({
+   vector = new ol.layer.Heatmap({
     source: vectorSource,
     radius: 12,
     opacity: 0.6,
@@ -45,7 +45,7 @@ setTimeout(function(){
     source: new ol.source.OSM()
   });
   
-  new ol.Map({
+  var map = new ol.Map({
     layers: [raster, vector],
     target: 'map',
     view: new ol.View({
@@ -53,13 +53,7 @@ setTimeout(function(){
       zoom: 5
     })
   });
+
   
  }, 200);
-
-
-
-
-
-
-
-
+  

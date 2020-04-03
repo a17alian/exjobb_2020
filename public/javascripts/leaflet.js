@@ -1,5 +1,5 @@
 let array_data = JSON.parse(localStorage.getItem("scrapedData"))  || [];
-
+let tile_data = JSON.parse(localStorage.getItem("scrapedTileData"))  || [];
 // Fetching data from mongoDB with AJAX
 $.ajax({
     url: "http://localhost:3000/data",
@@ -53,21 +53,21 @@ heatmapObj = {};
 var heatmapLayer = new HeatmapOverlay(cfg);   
 
 function print_time(end_time){
-        if(array_data.length < 10){   
-            var stored_time = localStorage.getItem("get_time");
-            var measurement = (end_time -  stored_time);
+    if(array_data.length < 10){   
+        var stored_time = localStorage.getItem("get_time");
+        var measurement = (end_time -  stored_time);
 
-            array_data.push(Math.round(measurement));
-            localStorage.setItem("scrapedData", JSON.stringify(array_data));
-            
-            console.log(array_data);
-            document.getElementById('data').innerHTML = array_data;
-            document.getElementById('load_time').innerHTML = 'Load times [' + array_data.length + ']';
- 
-        } else{
-            console.log('Data finished');
-            localStorage.clear();
-        }
+        array_data.push(Math.round(measurement));
+        localStorage.setItem("scrapedData", JSON.stringify(array_data));
+        
+        //console.log(array_data);
+        document.getElementById('data').innerHTML = array_data;
+        document.getElementById('fab-btn').innerHTML = array_data.length ;
+
+    } else{
+        console.log('Data finished');
+        localStorage.clear();
+    }
 }
 
 function generateHeatmap(floods){
@@ -79,7 +79,6 @@ function generateHeatmap(floods){
     var end_time = Date.now();
     print_time(end_time);
 }
-
 function generateMarkers(floods){
     for(var i = 0; i < floods.length; i ++){
         marker = L.marker([floods[i].lat, floods[i].long]).bindPopup(
@@ -114,6 +113,41 @@ var map = L.map('mapid', {
     layers: [heatmapLayer]
 });
 
+var tile_layer = L.tileLayer(mapboxUrl, {
+    attribution: mbAttr,
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1IjoiYWFsaWNlZWxpbiIsImEiOiJjazdhODdkaXcwd2diM2xvZ2RkaTZ0OWRiIn0.IFaMMoDYdmhfKPabfufJhA'
+}).addTo(map);
+
+$( ".leaflet-control-zoom-in").add(".leaflet-control-zoom-out").click(function() {
+    var tile_start = Date.now();
+    localStorage.setItem("tile_start", tile_start);
+  });
+
+tile_layer.on("load",function() { 
+    if(tile_data.length < 10 && localStorage.getItem("tile_start") != null){
+        var tile_end = Date.now();
+        var stored_time = localStorage.getItem("tile_start");
+        var completed_tile = (tile_end -  stored_time);
+
+        tile_data.push(Math.round(completed_tile));
+        localStorage.setItem("scrapedTileData", JSON.stringify(tile_data));
+        
+        console.log(tile_data);
+
+        localStorage.removeItem('tile_start');
+        document.getElementById('tile_data').innerHTML =  tile_data;
+    } else {
+        console.log('Tile Data finished');
+        localStorage.removeItem('scrapedTileData');
+        localStorage.removeItem('tile_start');
+    }
+
+});
+
 var baseMaps = {
     "Heatmap": heatmapLayer,
     "Streets": streets,
@@ -125,21 +159,7 @@ var overlayMaps = {
     "Markers": markers,
 };
 var popup = L.popup();
-
-var drawMap = function(){
-    L.tileLayer(mapboxUrl, {
-        attribution: mbAttr,
-        maxZoom: 18,
-        id: 'mapbox/streets-v11',
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: 'pk.eyJ1IjoiYWFsaWNlZWxpbiIsImEiOiJjazdhODdkaXcwd2diM2xvZ2RkaTZ0OWRiIn0.IFaMMoDYdmhfKPabfufJhA'
-    }).addTo(map);
-
-    L.control.layers(baseMaps, overlayMaps).addTo(map);
-}
-
-drawMap();
+L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 function panMap(){
     var lat = document.getElementById("latVal").value;
