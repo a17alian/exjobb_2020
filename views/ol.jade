@@ -2,14 +2,25 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/ol.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/ol.css')
     link(rel='stylesheet', href='https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/css/ol.css' type='text/css')
     script(src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/build/ol.js") 
-    script(src="https://code.jquery.com/jquery-3.4.1.js") 
+    script(src="https://code.jquery.com/jquery-2.2.3.min.js")    
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js") 
 
 body
   block content
     div(class='map' id='map')
+      #controlls
+        div
+          label(for="Heatmap") Heatmap
+          input(type="radio" value="Heatmap" name="layers")
+        div
+          label(for="Markers") Markers
+          input(type="radio" value="Markers" name="layers")
+
+      #popup
   script(src='/javascripts/ol.js')  
  
