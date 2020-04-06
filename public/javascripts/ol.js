@@ -72,7 +72,7 @@ setTimeout(function(){
   });
   
   var map = new ol.Map({
-    layers: [raster, vector, markerLayer],
+    layers: [raster, markerLayer],
     target: 'map',
     view: new ol.View({
       center: ol.proj.fromLonLat([13.404954, 52.520008]),
@@ -89,6 +89,19 @@ setTimeout(function(){
    offset: [0, -50]
  });
  map.addOverlay(popup);
+   
  }, 200);
-  
- 
+
+ $( "#controlls" ).click(function() {
+  switch($('input[type=radio][name=layers]:checked').attr('id')){
+   case 'heatmap':
+     map.setLayerGroup(vector);
+     break;
+   case 'markers':
+     break; 
+     map.setLayerGroup(layersMQ);
+   default: 
+     console.log('Not a id');
+  }
+
+});

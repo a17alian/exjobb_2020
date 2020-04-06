@@ -2,7 +2,7 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/ol.css')
     link(rel='stylesheet', href='https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/css/ol.css' type='text/css')
@@ -16,10 +16,10 @@ body
       #controlls
         div
           label(for="Heatmap") Heatmap
-          input(type="radio" value="Heatmap" name="layers")
+          input(type="radio" id="heatmap" name="layers")
         div
           label(for="Markers") Markers
-          input(type="radio" value="Markers" name="layers")
+          input(type="radio" id="markers" value="Markers" name="layers")
 
       #popup
   script(src='/javascripts/ol.js')  
