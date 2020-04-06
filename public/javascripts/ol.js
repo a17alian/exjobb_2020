@@ -4,6 +4,7 @@ $.ajax({
   dataType: 'json', // added data type
   success: function(res) {
     generateMarkers(res);
+    generateHeatmap(res);
   }
 });
 
@@ -21,8 +22,8 @@ var marker = {
   }
 };
 
-function toGeoJson(floods) {
-  for(var i = 0; i < floods.length; i ++){
+function generateHeatmap(floods) {
+  for(var i = 0; i < 1000; i ++){
     marker[i] = {type: 'Feature', properties: {}, geometry: { type: 'Point', coordinates: ol.proj.fromLonLat([floods[i].long, floods[i].lat])}};
     geojsonObject.features.push(marker[i]);
   }
@@ -42,7 +43,7 @@ var iconStyle = new ol.style.Style({
 var iconFeatures = [];
 
 function generateMarkers(floods) {
-  for(var i = 0; i < 100; i ++){
+  for(var i = 0; i < 1000; i ++){
     var iconFeature = new ol.Feature({geometry: new ol.geom.Point(ol.proj.fromLonLat([floods[i].long, floods[i].lat])), country: floods[i].country, cause: floods[i].maincause, dead: floods[i].dead, began: floods[i].began, ended: floods[i].ended
     });
     iconFeature.setStyle(iconStyle);
@@ -53,11 +54,11 @@ function generateMarkers(floods) {
   var heatmapSource =  new ol.source.Vector({
     features: new ol.format.GeoJSON().readFeatures(geojsonObject)
   });
+
   var heatmapLayer = new ol.layer.Heatmap({
     source: heatmapSource,
     radius: 12,
     opacity: 0.6,
-
   });
 
   // Marker
@@ -73,7 +74,7 @@ function generateMarkers(floods) {
   });
   
   var map = new ol.Map({
-    layers: [raster , markerLayer],
+    layers: [raster],
     target: 'map',
     view: new ol.View({
       center: ol.proj.fromLonLat([13.404954, 52.520008]),
@@ -96,9 +97,13 @@ function generateMarkers(floods) {
   switch(clicked_id ){
    case 'heatmap':
        console.log(clicked_id);
+       map.removeLayer(markerLayer);
+       map.addLayer(heatmapLayer);
      break;
    case 'markers':
        console.log(clicked_id);
+       map.addLayer(markerLayer);
+       map.removeLayer(heatmapLayer);
      break; 
    default: 
      console.log('Not a id');
