@@ -13,16 +13,14 @@ html
 body
     block content
         #mapid
-            #fab-btn(onclick='showInput()') +
+            #fab-btn(onclick='showInput()') 
             #fab-input   
                 span#exit-btn(onclick='showInput()') X
-                h2 Enter latitude and longitud coordinates
-                input#latVal(type="text", placeholder="Enter latitude values or click map")
-                input#lngVal(type="text", placeholder="Enter longitude values or click map")
-                .btn-container
-                    button(type="submit", onclick='showInput(); panMap()') Go to coordinates
-                    button(type="submit", onclick='showInput(); addMarker()') Confirm
-                    button(type="submit", onclick='showInput(); clearMarkers()') Clear all markers
+                h2#load_time 
+                h5#data
+                h5#tile_data 
+                button#send_data Send Data
+
 
 footer
     script(src="https://raw.githack.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js")  
