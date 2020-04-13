@@ -36,7 +36,7 @@ var iconStyle = new ol.style.Style({
     anchor: [0.5, 46],
     anchorXUnits: 'fraction',
     anchorYUnits: 'pixels',
-    scale: 0.10,
+    scale: 0.13,
     src: '../marker.png'
   })
 });
@@ -122,7 +122,11 @@ map.on('click', function(evt) {
     $(element).popover({
       placement: 'top',
       html: true,
-      content: '<span> Country: ' + feature.get('country') + '</span>', 
+      content: '<h5>' + feature.get('country') + '</h5>' + 
+      '<div> Casue: ' +  feature.get('cause') + '</div>' +
+      '<div> Dead: ' + feature.get('dead') + '</div>' + 
+      '<div> Began: ' + feature.get('began') + '</div>' + 
+      '<div> Ended: ' + feature.get('ended') + '</div>'
     });
     $(element).popover('show');
   } else {

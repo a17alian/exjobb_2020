@@ -21,5 +21,8 @@ body{
   transition: all 0.1s ease-in-out;
   cursor: pointer;
   z-index: 1000;
+}
 
+#popup {
+  min-width: 250px;
 }
