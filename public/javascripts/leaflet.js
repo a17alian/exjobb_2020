@@ -24,8 +24,6 @@ var coordsData = {
     data: []
 };  
 
-var streets = L.tileLayer(mapboxUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
-
 heatmapObj = {};
 
  var cfg = {
@@ -146,16 +144,13 @@ tile_layer.on("load",function() {
 
 });
 
-var baseMaps = {
-    "Heatmap": heatmapLayer,
-    "Streets": streets,
-};
 
 var overlayMaps = {
+    "Heatmap": heatmapLayer,
     "Markers": markers,
 };
 var popup = L.popup();
-L.control.layers(baseMaps, overlayMaps).addTo(map);
+L.control.layers(overlayMaps).addTo(map);
 
 function panMap(){
     var lat = document.getElementById("latVal").value;
