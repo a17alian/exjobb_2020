@@ -24,9 +24,7 @@ var coordsData = {
     data: []
 };  
 
-var satellite = L.tileLayer(mapboxUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr}),
-    streets = L.tileLayer(mapboxUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr}),
-    grayscale = L.tileLayer(mapboxUrl, {id: 'mapbox/light-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr})
+var streets = L.tileLayer(mapboxUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
 
 heatmapObj = {};
 
@@ -151,8 +149,6 @@ tile_layer.on("load",function() {
 var baseMaps = {
     "Heatmap": heatmapLayer,
     "Streets": streets,
-    "Grayscale": grayscale,
-    "Satellite":satellite,
 };
 
 var overlayMaps = {
