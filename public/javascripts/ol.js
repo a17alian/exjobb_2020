@@ -36,8 +36,8 @@ var iconStyle = new ol.style.Style({
     anchor: [0.5, 46],
     anchorXUnits: 'fraction',
     anchorYUnits: 'pixels',
-    scale: 0.15,
-    src: '../avo.png'
+    scale: 0.10,
+    src: '../marker.png'
   })
 });
 var iconFeatures = [];
