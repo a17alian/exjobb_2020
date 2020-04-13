@@ -42,6 +42,8 @@ var iconStyle = new ol.style.Style({
 });
 var iconFeatures = [];
 
+  // Marker
+  var markerSource = new ol.source.Vector({});
 function generateMarkers(floods) {
   for(var i = 0; i < 1000; i ++){
     var iconFeature = new ol.Feature({geometry: new ol.geom.Point(ol.proj.fromLonLat([floods[i].long, floods[i].lat])), country: floods[i].country, cause: floods[i].maincause, dead: floods[i].dead, began: floods[i].began, ended: floods[i].ended
@@ -50,6 +52,7 @@ function generateMarkers(floods) {
     markerSource.addFeature(iconFeature);
   } // for loop end
 }
+setTimeout(function(){
   // Heatmap
   var heatmapSource =  new ol.source.Vector({
     features: new ol.format.GeoJSON().readFeatures(geojsonObject)
@@ -61,8 +64,6 @@ function generateMarkers(floods) {
     opacity: 0.6,
   });
 
-  // Marker
-  var markerSource = new ol.source.Vector({});
 
   var markerLayer = new ol.layer.Vector({
     source: markerSource
@@ -74,7 +75,7 @@ function generateMarkers(floods) {
   });
   
   var map = new ol.Map({
-    layers: [raster],
+    layers: [raster, heatmapLayer],
     target: 'map',
     view: new ol.View({
       center: ol.proj.fromLonLat([13.404954, 52.520008]),
@@ -97,6 +98,7 @@ function generateMarkers(floods) {
   switch(clicked_id ){
    case 'heatmap':
        console.log(clicked_id);
+       console.log(geojsonObject);
        map.removeLayer(markerLayer);
        map.addLayer(heatmapLayer);
      break;
@@ -135,3 +137,4 @@ map.on('click', function(evt) {
 });
 
 
+}, 200);
