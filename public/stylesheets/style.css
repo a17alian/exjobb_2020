@@ -6,10 +6,6 @@ body{
 	margin: 0;
 	font-family: Arial, Helvetica, sans-serif;
 }
-#mapid { 
-	height: 100vh;
-	position: relative;
-}
 
 #fab-btn {
   height: 50px;
