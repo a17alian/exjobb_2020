@@ -61,8 +61,8 @@ var iconStyle = new ol.style.Style({
     anchor: [0.5, 46],
     anchorXUnits: 'fraction',
     anchorYUnits: 'pixels',
-    scale: 0.13,
-    src: '../marker.png'
+    scale: 0.5,
+    src: '../leaflet_icon.png'
   })
 });
 var iconFeatures = [];
