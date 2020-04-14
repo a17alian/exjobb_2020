@@ -50,7 +50,7 @@ body{
 	transform: translate(-50%, -50%);
 	margin:  auto;
 	padding: 10px;
-	pointer-events: auto !important;
+
 	display: none;
 	flex-direction: column;
 	flex-wrap: wrap;

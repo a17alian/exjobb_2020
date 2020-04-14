@@ -1,5 +1,7 @@
 let array_data = JSON.parse(localStorage.getItem("scrapedData"))  || [];
 let tile_data = JSON.parse(localStorage.getItem("scrapedTileData"))  || [];
+var dataPoints = 2000;
+
 // Fetching data from mongoDB with AJAX
 $.ajax({
     url: "http://localhost:3000/data",
@@ -104,8 +106,8 @@ function generateCircles(floods){
 }
 
 var map = L.map('mapid', {
-    center: [52.520008, 13.404954],
-    zoom: 5,
+    center: [41.015137, 28.979530],
+    zoom: 4,
     layers: [heatmapLayer]
 });
 

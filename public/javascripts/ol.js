@@ -2,6 +2,8 @@ var render_data = JSON.parse(localStorage.getItem("scrapedData"))  || [];
 var zoom_data = JSON.parse(localStorage.getItem("scrapedZoomData"))  || [];
 var timeout = 300;
 var zoomOn = false;
+var dataPoints = 2000;
+
 $.ajax({
   url: "http://localhost:3000/data",
   type: 'GET',
@@ -100,8 +102,8 @@ setTimeout(function(){
     layers: [ raster, heatmapLayer ],
     target: 'map',
     view: new ol.View({
-      center: ol.proj.fromLonLat([13.404954, 52.520008]),
-      zoom: 5
+      center: ol.proj.fromLonLat([28.979530 ,41.015137 ]),
+      zoom: 4
     })
   });
 // Initial render
@@ -175,27 +177,31 @@ var element = document.getElementById('popup');
 });
 
 // display popup on click
-map.on('click', function(evt) {
-  var feature = map.forEachFeatureAtPixel(evt.pixel,
-    function(feature) {
-      return feature;
-    });
-  if (feature) {
-    var coordinates = feature.getGeometry().getCoordinates();
-    popup.setPosition(coordinates);
-    $(element).popover({
-      placement: 'top',
-      html: true,
-      content: '<h5>' + feature.get('country') + '</h5>' + 
-      '<div> Casue: ' +  feature.get('cause') + '</div>' +
-      '<div> Dead: ' + feature.get('dead') + '</div>' + 
-      '<div> Began: ' + feature.get('began') + '</div>' + 
-      '<div> Ended: ' + feature.get('ended') + '</div>'
-    });
-    $(element).popover('show');
-  } else {
-    $(element).popover('destroy');
-  }
-});
 
+map.on('click', function(evt) {
+    var feature = map.forEachFeatureAtPixel(evt.pixel,
+      function(feature) {
+        return feature;
+      });
+    if (feature) {
+      if($('input[type=radio][name=layers]:checked').attr('id') == 'markers'){
+        var coordinates = feature.getGeometry().getCoordinates();
+        popup.setPosition(coordinates);
+        $(element).popover({
+          placement: 'top',
+          html: true,
+          content: '<h5>' + feature.get('country') + '</h5>' + 
+          '<div> Casue: ' +  feature.get('cause') + '</div>' +
+          '<div> Dead: ' + feature.get('dead') + '</div>' + 
+          '<div> Began: ' + feature.get('began') + '</div>' + 
+          '<div> Ended: ' + feature.get('ended') + '</div>'
+        });
+        $(element).popover('show');
+      }
+    } else {
+      $(element).popover('destroy');
+    }
+  
+
+});
 }, timeout);
