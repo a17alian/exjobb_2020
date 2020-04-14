@@ -42,13 +42,15 @@ body{
 	position: absolute;
 	z-index: 1000;
 	width: 30%;
+	max-height: 300px;
+	overflow: scroll;
 	top: 35%;
 	left: 50%;
 	margin-right: -50%;
 	transform: translate(-50%, -50%);
 	margin:  auto;
 	padding: 10px;
-
+	pointer-events: auto !important;
 	display: none;
 	flex-direction: column;
 	flex-wrap: wrap;
@@ -62,6 +64,15 @@ body{
 	width: 90%;
 	padding: 10px;
 	margin: 10px;
+}
+
+#fab-input>div{
+	display: flex;
+	justify-content: center;
+	}
+	
+#fab-input>div > div{
+padding: 20px;
 }
 #exit-btn{
 width: 100%;
@@ -102,3 +113,4 @@ display: inline-block;
 .split-section:hover {
   background-color: aquamarine;
 }
+

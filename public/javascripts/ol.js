@@ -1,14 +1,21 @@
-
+var render_data = JSON.parse(localStorage.getItem("scrapedData"))  || [];
+var zoom_data = JSON.parse(localStorage.getItem("scrapedZoomData"))  || [];
+var timeout = 300;
+var zoomOn = false;
 $.ajax({
   url: "http://localhost:3000/data",
   type: 'GET',
   dataType: 'json', // added data type
+  beforeSend: function(){
+    // get time before GET
+    let render_start = Date.now();
+    localStorage.setItem("render_start", render_start);
+},
   success: function(res) {
     generateHeatmap(res);
     generateMarkers(res);
   }
 });
-$("#heatmap").prop("checked", true);
 var geojsonObject = {
   "type": "FeatureCollection",
   "features": []
@@ -22,7 +29,23 @@ var marker = {
     "coordinates": "",
   }
 };
+function print_time(end_time){
+  if(render_data.length < 10){   
+      var stored_time = localStorage.getItem("render_start");
+      var render_complete = (end_time -  stored_time) - timeout;
 
+      render_data.push(Math.round(render_complete));
+      localStorage.setItem("scrapedData", JSON.stringify(render_data));
+      
+      //console.log(array_data);
+      document.getElementById('data').innerHTML = render_data.join(" <br> ");
+      document.getElementById('fab-btn').innerHTML = render_data.length ;
+
+  } else{
+      console.log('Data finished');
+      localStorage.clear();
+  }
+}
 function generateHeatmap(floods) {
   for(var i = 0; i < floods.length; i ++){
     marker[i] = {type: 'Feature', properties: {}, geometry: { type: 'Point', coordinates: ol.proj.fromLonLat([floods[i].long, floods[i].lat])}};
@@ -30,7 +53,6 @@ function generateHeatmap(floods) {
   }
   return geojsonObject
 };
-
 
 var iconStyle = new ol.style.Style({
   image: new ol.style.Icon({
@@ -42,9 +64,8 @@ var iconStyle = new ol.style.Style({
   })
 });
 var iconFeatures = [];
-
   // Marker
-  var markerSource = new ol.source.Vector({});
+var markerSource = new ol.source.Vector({});
 
 function generateMarkers(floods) {
   for(var i = 0; i < floods.length; i ++){
@@ -74,17 +95,60 @@ setTimeout(function(){
     source: new ol.source.OSM(),
     crossOrigin: ''
   });
-  
+
   var map = new ol.Map({
-    layers: [raster, heatmapLayer],
+    layers: [ raster, heatmapLayer ],
     target: 'map',
     view: new ol.View({
       center: ol.proj.fromLonLat([13.404954, 52.520008]),
       zoom: 5
     })
   });
+// Initial render
+map.once('rendercomplete', function() {
+  console.log('render');
+  var render_end = Date.now();
+  print_time(render_end);
+  
+});
+function zoom_time(on){
+  map.once('rendercomplete', function() {
+    console.log(zoomOn);
+  if(on == true && zoom_data.length < 10  && localStorage.getItem("render_start") != null && render_data.length == 10){
+    var zoom_end = Date.now();
+    var stored_time = localStorage.getItem("zoom_start");
+    var completed_zoom = (zoom_end -  stored_time);
 
-  var element = document.getElementById('popup');
+    zoom_data.push(Math.round(completed_zoom));
+    localStorage.setItem("scrapedZoomData", JSON.stringify(zoom_data));
+    
+    console.log(zoom_data);
+
+    localStorage.removeItem('zoom_start');        
+    document.getElementById('zoom_data').innerHTML =  zoom_data.join(" <br> ");
+} else {
+    console.log('Zoom Data Not Measured');
+    localStorage.removeItem('scrapedZoomData');
+    localStorage.removeItem('zoom_start');
+  }
+});
+}
+
+$(".ol-zoom-in").add(".ol-zoom-out").click(function() {
+  console.log(zoomOn);
+  var zoom_start = Date.now();
+  localStorage.setItem("zoom_start", zoom_start);
+  zoomOn = true;
+  console.log(zoomOn);
+});
+
+map.on('moveend', function(){  
+    zoom_time(zoomOn);
+});
+
+
+
+var element = document.getElementById('popup');
 
  var popup = new ol.Overlay({
    element: element,
@@ -134,5 +198,4 @@ map.on('click', function(evt) {
   }
 });
 
-
-}, 300);
+}, timeout);

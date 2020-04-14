@@ -57,7 +57,7 @@ function print_time(end_time){
         localStorage.setItem("scrapedData", JSON.stringify(array_data));
         
         //console.log(array_data);
-        document.getElementById('data').innerHTML = array_data;
+        document.getElementById('data').innerHTML = array_data.join(" <br> ");
         document.getElementById('fab-btn').innerHTML = array_data.length ;
 
     } else{
@@ -118,7 +118,7 @@ var tile_layer = L.tileLayer(mapboxUrl, {
     accessToken: 'pk.eyJ1IjoiYWFsaWNlZWxpbiIsImEiOiJjazdhODdkaXcwd2diM2xvZ2RkaTZ0OWRiIn0.IFaMMoDYdmhfKPabfufJhA'
 }).addTo(map);
 
-$( ".leaflet-control-zoom-in").add(".leaflet-control-zoom-out").click(function() {
+$(".leaflet-control-zoom-in").add(".leaflet-control-zoom-out").click(function() {
     var tile_start = Date.now();
     localStorage.setItem("tile_start", tile_start);
   });
@@ -135,7 +135,7 @@ tile_layer.on("load",function() {
         console.log(tile_data);
 
         localStorage.removeItem('tile_start');
-        document.getElementById('tile_data').innerHTML =  tile_data;
+        document.getElementById('tile_data').innerHTML =  tile_data.join(" <br> ");
     } else {
         console.log('Tile Data finished');
         localStorage.removeItem('scrapedTileData');
@@ -144,18 +144,11 @@ tile_layer.on("load",function() {
 
 });
 
-
 var overlayMaps = {
     "Heatmap": heatmapLayer,
     "Markers": markers,
 };
+
 var popup = L.popup();
 L.control.layers(overlayMaps).addTo(map);
-
-function panMap(){
-    var lat = document.getElementById("latVal").value;
-    var lng = document.getElementById("lngVal").value;
-    map.panTo([lat, lng]);  
-}
-
 

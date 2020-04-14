@@ -24,9 +24,10 @@ body
       #fab-btn(onclick='showInput()') 
       #fab-input   
           span#exit-btn(onclick='showInput()') X
-          h2#load_time 
-          h5#data
-          h5#tile_data 
+          h5 Render and zoom data
+          div 
+            div#data
+            div#zoom_data 
           button#send_data Send Data
   script(src='/javascripts/ol.js')
   script(src='/javascripts/shared.js')  
