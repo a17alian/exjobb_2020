@@ -16,9 +16,6 @@ $.ajax({
        generateMarkers(res);
     }
 });
-// Map variables
-var mapboxUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWFsaWNlZWxpbiIsImEiOiJjazdhODdkaXcwd2diM2xvZ2RkaTZ0OWRiIn0.IFaMMoDYdmhfKPabfufJhA',
-    mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
 
 var markers = L.layerGroup();
 var coordsData = {
@@ -58,7 +55,6 @@ function print_time(end_time){
         array_data.push(Math.round(measurement));
         localStorage.setItem("scrapedData", JSON.stringify(array_data));
         
-        //console.log(array_data);
         document.getElementById('data').innerHTML = array_data.join(" <br> ");
         document.getElementById('fab-btn').innerHTML = array_data.length ;
 
@@ -74,8 +70,9 @@ function generateHeatmap(floods){
         coordsData.data.push(heatmapObj[i]);
     }
     heatmapLayer.setData(coordsData);
-    var end_time = Date.now();
+    /*var end_time = Date.now();
     print_time(end_time);
+    */
 }
 function generateMarkers(floods){
     for(var i = 0; i < floods.length; i ++){
@@ -87,37 +84,18 @@ function generateMarkers(floods){
             'Ended: ' + floods[i].ended);
         markers.addLayer(marker);    
     }
-}
-function generateCircles(floods){
-    for(var i = 0; i < floods.length; i ++){
-        circle = L.circle([floods[i].lat, floods[i].long], {
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.5,
-            radius: 15
-        }).bindPopup(
-            '<h3> ' + floods[i].country + ' </h3>' + 
-            'Main cause: ' +  floods[i].maincause + '<br>' + 
-            'Dead: ' + floods[i].dead + '<br>' + 
-            'Began: ' + floods[i].began + '<br>' + 
-            'Ended: ' + floods[i].ended);
-        markers.addLayer(circle);    
-    }
+    var end_time = Date.now();
+    print_time(end_time);
 }
 
 var map = L.map('mapid', {
     center: [41.015137, 28.979530],
-    zoom: 4,
-    layers: [heatmapLayer]
+    zoom: 3,
+    layers: [markers]
 });
 
-var tile_layer = L.tileLayer(mapboxUrl, {
-    attribution: mbAttr,
-    maxZoom: 18,
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: 'pk.eyJ1IjoiYWFsaWNlZWxpbiIsImEiOiJjazdhODdkaXcwd2diM2xvZ2RkaTZ0OWRiIn0.IFaMMoDYdmhfKPabfufJhA'
+var tile_layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 }).addTo(map);
 
 $(".leaflet-control-zoom-in").add(".leaflet-control-zoom-out").click(function() {
@@ -126,7 +104,7 @@ $(".leaflet-control-zoom-in").add(".leaflet-control-zoom-out").click(function() 
   });
 
 tile_layer.on("load",function() { 
-    if(tile_data.length < 10 && localStorage.getItem("tile_start") != null){
+    if(localStorage.getItem("tile_start") != null){
         var tile_end = Date.now();
         var stored_time = localStorage.getItem("tile_start");
         var completed_tile = (tile_end -  stored_time);
@@ -143,7 +121,6 @@ tile_layer.on("load",function() {
         localStorage.removeItem('scrapedTileData');
         localStorage.removeItem('tile_start');
     }
-
 });
 
 var overlayMaps = {

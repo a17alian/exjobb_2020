@@ -28,7 +28,9 @@ body
           div 
             div#data
             div#zoom_data 
-          button#send_data Send Data
+          button#send_data Send Render Data
+          button#send_zoom_data Send Zoom Data
+          button(id="clear" onclick='clearStorage()')  Clear localStorage
   script(src='/javascripts/ol.js')
   script(src='/javascripts/shared.js')  
  

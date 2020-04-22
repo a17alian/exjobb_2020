@@ -40,7 +40,7 @@ function print_time(end_time){
       localStorage.setItem("scrapedData", JSON.stringify(render_data));
       
       //console.log(array_data);
-      document.getElementById('data').innerHTML = render_data.join(" <br> ");
+      document.getElementById('data').innerHTML = render_data.join(", <br> ");
       document.getElementById('fab-btn').innerHTML = render_data.length ;
 
   } else{
@@ -99,11 +99,11 @@ setTimeout(function(){
   });
 
   var map = new ol.Map({
-    layers: [ raster, heatmapLayer ],
+    layers: [ raster, markerLayer ],
     target: 'map',
     view: new ol.View({
       center: ol.proj.fromLonLat([28.979530 ,41.015137 ]),
-      zoom: 4
+      zoom: 0
     })
   });
 // Initial render
@@ -115,8 +115,7 @@ map.once('rendercomplete', function() {
 });
 function zoom_time(on){
   map.once('rendercomplete', function() {
-    console.log(zoomOn);
-  if(on == true && zoom_data.length < 10  && localStorage.getItem("render_start") != null && render_data.length == 10){
+  if(on == true && localStorage.getItem("render_start") != null){
     var zoom_end = Date.now();
     var stored_time = localStorage.getItem("zoom_start");
     var completed_zoom = (zoom_end -  stored_time);
@@ -124,10 +123,8 @@ function zoom_time(on){
     zoom_data.push(Math.round(completed_zoom));
     localStorage.setItem("scrapedZoomData", JSON.stringify(zoom_data));
     
-    console.log(zoom_data);
-
     localStorage.removeItem('zoom_start');        
-    document.getElementById('zoom_data').innerHTML =  zoom_data.join(" <br> ");
+    document.getElementById('zoom_data').innerHTML =  zoom_data.join(", <br> ");
 } else {
     console.log('Zoom Data Not Measured');
     localStorage.removeItem('scrapedZoomData');
@@ -137,18 +134,16 @@ function zoom_time(on){
 }
 
 $(".ol-zoom-in").add(".ol-zoom-out").click(function() {
-  console.log(zoomOn);
+
+  console.log('Clicked');
   var zoom_start = Date.now();
   localStorage.setItem("zoom_start", zoom_start);
   zoomOn = true;
-  console.log(zoomOn);
 });
 
 map.on('moveend', function(){  
     zoom_time(zoomOn);
 });
-
-
 
 var element = document.getElementById('popup');
 
@@ -177,7 +172,6 @@ var element = document.getElementById('popup');
 });
 
 // display popup on click
-
 map.on('click', function(evt) {
     var feature = map.forEachFeatureAtPixel(evt.pixel,
       function(feature) {
@@ -201,7 +195,5 @@ map.on('click', function(evt) {
     } else {
       $(element).popover('destroy');
     }
-  
-
 });
 }, timeout);

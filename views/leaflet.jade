@@ -19,11 +19,11 @@ body
                 span#exit-btn(onclick='showInput()') X
                 h3 Render and zoom data
                 div 
+                    button#send_data Send Render Data
+                    button#send_zoom_data Send Zoom Data
+                    button(id='clear' onclick='clearStorage()')  Clear localStorage
                     div#data
                     div#tile_data 
-                button#send_data Send Data
-
-
 footer
     script(src="https://raw.githack.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js")  
     script(src='/javascripts/leaflet.js')

@@ -14,3 +14,8 @@ window.onkeydown = function( event ) {
         showInput();
     }
 };
+
+function clearStorage(){
+  localStorage.clear();
+  alert('LocalStorage cleared!');
+}
