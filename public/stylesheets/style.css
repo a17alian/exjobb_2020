@@ -6,10 +6,6 @@ body{
 	margin: 0;
 	font-family: Arial, Helvetica, sans-serif;
 }
-#mapid { 
-	height: 100vh;
-	position: relative;
-}
 
 #fab-btn {
   height: 50px;
@@ -46,6 +42,8 @@ body{
 	position: absolute;
 	z-index: 1000;
 	width: 30%;
+	max-height: 300px;
+	overflow: scroll;
 	top: 35%;
 	left: 50%;
 	margin-right: -50%;
@@ -66,6 +64,15 @@ body{
 	width: 90%;
 	padding: 10px;
 	margin: 10px;
+}
+
+#fab-input>div{
+	display: flex;
+	justify-content: center;
+	}
+	
+#fab-input>div > div{
+padding: 20px;
 }
 #exit-btn{
 width: 100%;
@@ -106,3 +113,4 @@ display: inline-block;
 .split-section:hover {
   background-color: aquamarine;
 }
+

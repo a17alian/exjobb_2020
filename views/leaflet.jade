@@ -3,6 +3,7 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/leaflet.css')
     script(src="https://code.jquery.com/jquery-3.4.1.js")
     script(src='/javascripts/heatmap.js')
     script.
@@ -10,21 +11,24 @@ html
         L_DISABLE_3D = true;
     link(rel='stylesheet', href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css")
     script(src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js")
+
 body
     block content
         #mapid
             #fab-btn(onclick='showInput()') 
             #fab-input   
                 span#exit-btn(onclick='showInput()') X
-                h2#load_time 
-                h5#data
-                h5#tile_data 
-                button#send_data Send Data
-
-
+                h3 Render and zoom data
+                div 
+                    button#send_data Send Render Data
+                    button#send_zoom_data Send Zoom Data
+                    button(id='clear' onclick='clearStorage()')  Clear localStorage
+                    div#data
+                    div#tile_data 
 footer
     script(src="https://raw.githack.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js")  
     script(src='/javascripts/leaflet.js')
+    script(src='/javascripts/shared.js')
 
     
 
