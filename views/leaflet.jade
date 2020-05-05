@@ -6,9 +6,6 @@ html
     link(rel='stylesheet', href='/stylesheets/leaflet.css')
     script(src="https://code.jquery.com/jquery-3.4.1.js")
     script(src='/javascripts/heatmap.js')
-    script.
-        // Disable hardware acceleration for Leaflet
-        L_DISABLE_3D = true;
     link(rel='stylesheet', href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css")
     script(src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js")
 
@@ -23,6 +20,7 @@ body
                     button#send_data Send Render Data
                     button#send_zoom_data Send Zoom Data
                     button(id='clear' onclick='clearStorage()')  Clear localStorage
+                    button#start_zoom Start Zoom
                     div#data
                     div#tile_data 
 footer

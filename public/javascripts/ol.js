@@ -4,20 +4,27 @@ var timeout = 300;
 var zoomOn = false;
 var dataPoints = 2000;
 
-$.ajax({
-  url: "http://localhost:3000/data",
-  type: 'GET',
-  dataType: 'json', // added data type
-  beforeSend: function(){
-    // get time before GET
-    let render_start = Date.now();
-    localStorage.setItem("render_start", render_start);
-},
-  success: function(res) {
-    generateHeatmap(res);
-    generateMarkers(res);
+// Fetching data from mongoDB with AJAX
+function print_data() {
+  for (let i = 0; i < 1; i++) {
+      $.ajax({
+          url: "http://localhost:3000/data",
+          type: 'GET',
+          dataType: 'json', // added data type
+          beforeSend: function () {
+            // get time before GET
+            let render_start = Date.now();
+            localStorage.setItem("render_start", render_start);
+          }, success: function (res) {
+              floods_large.push(res);
+              generateMarkers(floods_large);
+              generateHeatmap(floods_large);
+
+          }
+      });
   }
-});
+}
+print_data();
 var geojsonObject = {
   "type": "FeatureCollection",
   "features": []

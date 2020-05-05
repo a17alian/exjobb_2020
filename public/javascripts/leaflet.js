@@ -5,7 +5,7 @@ let floods_large = [];
 
 // Fetching data from mongoDB with AJAX
 function print_data() {
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 1; i++) {
         $.ajax({
             url: "http://localhost:3000/data",
             type: 'GET',
@@ -75,6 +75,7 @@ function print_time(end_time) {
 
 function generateHeatmap(floods) {
     if (floods.length == 2) {
+        console.log(2);
         for (var i = 0; i < floods.length; i++) {
             var flood = floods[i];
             for (var j = 0; j < flood.length; j++) {
@@ -83,8 +84,20 @@ function generateHeatmap(floods) {
             }
         }
         heatmapLayer.setData(coordsData);
-        //console.log(coordsData);
-    } else {
+        var end_time = Date.now();
+        print_time(end_time);
+    } else if (floods.length == 1) {
+        console.log(1);
+        for (var i = 0; i < floods.length; i++) {
+            var flood = floods[i];
+            for (var j = 0; j < flood.length; j++) {
+                heatmapObj[j] = { lat: flood[j].lat, lng: flood[j].long }
+                coordsData.data.push(heatmapObj[j]);
+            }
+        }
+        heatmapLayer.setData(coordsData);
+        var end_time = Date.now();
+        print_time(end_time);
     }
 
 }
@@ -92,6 +105,7 @@ function generateHeatmap(floods) {
 
 function generateMarkers(floods) {
     if (floods.length == 2) {
+        console.log(2);
         for (var i = 0; i < floods.length; i++) {
             var flood = floods[i];
             for (var j = 0; j < flood.length; j++) {
@@ -107,7 +121,9 @@ function generateMarkers(floods) {
         }
         var end_time = Date.now();
         print_time(end_time);
+        
     } else if (floods.length == 1) {
+        console.log(1);
         for (var i = 0; i < floods.length; i++) {
             var flood = floods[i];
             for (var j = 0; j < flood.length; j++) {
@@ -127,8 +143,8 @@ function generateMarkers(floods) {
 
 
 var map = L.map('mapid', {
-    center: [41.015137, 28.979530],
-    zoom: 3,
+    center: [37.794594, -25.506134],
+    zoom: 0,
     layers: [markers]
 });
 
