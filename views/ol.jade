@@ -2,6 +2,7 @@ doctype html
 html
   head
     title= title
+    meta(http-equiv='Cache-Control', content='no-store')
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/ol.css')
@@ -13,6 +14,12 @@ html
 body
   block content
     div(class='map' id='map')
+      div#buttons
+        button#start_zoom Start Zoom
+        button#start_render Start Render
+        button#send_data Send Render Data
+        button#send_zoom_data Send Zoom Data
+        button(id='clear' onclick='clearStorage()')  Clear localStorage
       #controlls
         div
           input(type="radio" id="heatmap" name="layers")
@@ -27,11 +34,9 @@ body
           h5 Render and zoom data
           div 
             div#data
-            div#zoom_data 
-          button#send_data Send Render Data
-          button#send_zoom_data Send Zoom Data
-          button(id="clear" onclick='clearStorage()')  Clear localStorage
-          button#start_zoom Start Zoom
+                h3 Render data
+            div#tile_data 
+                h3 Zoom data
   script(src='/javascripts/ol.js')
   script(src='/javascripts/shared.js')  
  

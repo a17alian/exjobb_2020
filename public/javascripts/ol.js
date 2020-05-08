@@ -3,10 +3,10 @@ var zoom_data = JSON.parse(localStorage.getItem("scrapedZoomData"))  || [];
 var timeout = 300;
 var zoomOn = false;
 var dataPoints = 2000;
+let floods_large = [];
 
 // Fetching data from mongoDB with AJAX
-function print_data() {
-  for (let i = 0; i < 1; i++) {
+
       $.ajax({
           url: "http://localhost:3000/data",
           type: 'GET',
@@ -16,15 +16,12 @@ function print_data() {
             let render_start = Date.now();
             localStorage.setItem("render_start", render_start);
           }, success: function (res) {
-              floods_large.push(res);
-              generateMarkers(floods_large);
-              generateHeatmap(floods_large);
+              generateMarkers(res);
+              generateHeatmap(res);
 
           }
       });
-  }
-}
-print_data();
+
 var geojsonObject = {
   "type": "FeatureCollection",
   "features": []
@@ -39,21 +36,15 @@ var marker = {
   }
 };
 function print_time(end_time){
-  if(render_data.length < 10){   
       var stored_time = localStorage.getItem("render_start");
       var render_complete = (end_time -  stored_time) - timeout;
 
       render_data.push(Math.round(render_complete));
       localStorage.setItem("scrapedData", JSON.stringify(render_data));
-      
       //console.log(array_data);
       document.getElementById('data').innerHTML = render_data.join(", <br> ");
       document.getElementById('fab-btn').innerHTML = render_data.length ;
 
-  } else{
-      console.log('Data finished');
-      localStorage.clear();
-  }
 }
 function generateHeatmap(floods) {
   for(var i = 0; i < floods.length; i ++){
@@ -115,7 +106,6 @@ setTimeout(function(){
   });
 // Initial render
 map.once('rendercomplete', function() {
-  console.log('render');
   var render_end = Date.now();
   print_time(render_end);
   

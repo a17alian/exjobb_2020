@@ -4,8 +4,6 @@ let dataPoints = 2000;
 let floods_large = [];
 
 // Fetching data from mongoDB with AJAX
-function print_data() {
-    for (let i = 0; i < 1; i++) {
         $.ajax({
             url: "http://localhost:3000/data",
             type: 'GET',
@@ -15,16 +13,11 @@ function print_data() {
                 let get_time = Date.now();
                 localStorage.setItem("get_time", get_time);
             }, success: function (res) {
-                floods_large.push(res);
-                generateMarkers(floods_large);
-                generateHeatmap(floods_large);
+                generateMarkers(res);
+                generateHeatmap(res);
 
             }
         });
-    }
-}
-print_data();
-
 
 var markers = L.layerGroup();
 var coordsData = {
@@ -57,7 +50,6 @@ var cfg = {
 var heatmapLayer = new HeatmapOverlay(cfg);
 
 function print_time(end_time) {
-    if (array_data.length < 10) {
         var stored_time = localStorage.getItem("get_time");
         var measurement = (end_time - stored_time);
 
@@ -66,85 +58,42 @@ function print_time(end_time) {
 
         document.getElementById('data').innerHTML = array_data.join(" <br> ");
         document.getElementById('fab-btn').innerHTML = array_data.length;
-
-    } else {
-        console.log('Data finished');
-        localStorage.clear();
-    }
 }
 
 function generateHeatmap(floods) {
-    if (floods.length == 2) {
-        console.log(2);
-        for (var i = 0; i < floods.length; i++) {
-            var flood = floods[i];
-            for (var j = 0; j < flood.length; j++) {
-                heatmapObj[j] = { lat: flood[j].lat, lng: flood[j].long }
-                coordsData.data.push(heatmapObj[j]);
-            }
-        }
-        heatmapLayer.setData(coordsData);
-        var end_time = Date.now();
-        print_time(end_time);
-    } else if (floods.length == 1) {
-        console.log(1);
-        for (var i = 0; i < floods.length; i++) {
-            var flood = floods[i];
-            for (var j = 0; j < flood.length; j++) {
-                heatmapObj[j] = { lat: flood[j].lat, lng: flood[j].long }
-                coordsData.data.push(heatmapObj[j]);
-            }
-        }
-        heatmapLayer.setData(coordsData);
-        var end_time = Date.now();
-        print_time(end_time);
+    for (var j = 0; j < floods.length; j++) {
+        heatmapObj[j] = { lat: floods[j].lat, lng: floods[j].long }
+        coordsData.data.push(heatmapObj[j]);
     }
+        heatmapLayer.setData(coordsData);
+        var end_time = Date.now();
+        print_time(end_time);
+
 
 }
 
 
-function generateMarkers(floods) {
-    if (floods.length == 2) {
-        console.log(2);
-        for (var i = 0; i < floods.length; i++) {
-            var flood = floods[i];
-            for (var j = 0; j < flood.length; j++) {
-                marker = L.marker([flood[j].lat, flood[j].long]).bindPopup(
-                    '<h3> ' + flood[j].country + ' </h3>' +
-                    'Cause: ' + flood[j].maincause + '<br>' +
-                    'Dead: ' + flood[j].dead + '<br>' +
-                    'Began: ' + flood[j].began + '<br>' +
-                    'Ended: ' + flood[j].ended);
-                markers.addLayer(marker);
-            }
-
-        }
-        var end_time = Date.now();
-        print_time(end_time);
-        
-    } else if (floods.length == 1) {
-        console.log(1);
-        for (var i = 0; i < floods.length; i++) {
-            var flood = floods[i];
-            for (var j = 0; j < flood.length; j++) {
-                marker = L.marker([flood[j].lat, flood[j].long]).bindPopup(
-                    '<h3> ' + flood[j].country + ' </h3>' +
-                    'Cause: ' + flood[j].maincause + '<br>' +
-                    'Dead: ' + flood[j].dead + '<br>' +
-                    'Began: ' + flood[j].began + '<br>' +
-                    'Ended: ' + flood[j].ended);
-                markers.addLayer(marker);
-            }
-        }
-        var end_time = Date.now();
-        print_time(end_time);
+function generateMarkers(flood) {
+    for (var j = 0; j < flood.length; j++) {
+        marker = L.marker([flood[j].lat, flood[j].long]).bindPopup(
+            '<h3> ' + flood[j].country + ' </h3>' +
+            'Cause: ' + flood[j].maincause + '<br>' +
+            'Dead: ' + flood[j].dead + '<br>' +
+            'Began: ' + flood[j].began + '<br>' +
+            'Ended: ' + flood[j].ended);
+        markers.addLayer(marker);
     }
+        var end_time = Date.now();
+        print_time(end_time);
+
 }
 
+// Azores 37.794594, -25.506134
+// Tuy Hoa 13.0954599, 109.3209381
 
 var map = L.map('mapid', {
-    center: [37.794594, -25.506134],
-    zoom: 0,
+    center: [13.0954599, 109.3209381],
+    zoom: 3,
     layers: [markers]
 });
 

@@ -2,6 +2,7 @@ doctype html
 html
   head
     title= title
+    meta(http-equiv='Cache-Control', content='no-store')
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/leaflet.css')
     script(src="https://code.jquery.com/jquery-3.4.1.js")
@@ -12,17 +13,20 @@ html
 body
     block content
         #mapid
+            div#buttons
+                button#start_zoom Start Zoom
+                button#start_render Start Render
+                button#send_data Send Render Data
+                button#send_zoom_data Send Zoom Data
+                button(id='clear' onclick='clearStorage()')  Clear localStorage
             #fab-btn(onclick='showInput()') 
             #fab-input   
                 span#exit-btn(onclick='showInput()') X
-                h3 Render and zoom data
-                div 
-                    button#send_data Send Render Data
-                    button#send_zoom_data Send Zoom Data
-                    button(id='clear' onclick='clearStorage()')  Clear localStorage
-                    button#start_zoom Start Zoom
+                div
                     div#data
+                        h3 Render data
                     div#tile_data 
+                        h3 Zoom data
 footer
     script(src="https://raw.githack.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js")  
     script(src='/javascripts/leaflet.js')
