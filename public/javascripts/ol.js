@@ -2,8 +2,8 @@ var render_data = JSON.parse(localStorage.getItem("scrapedData"))  || [];
 var zoom_data = JSON.parse(localStorage.getItem("scrapedZoomData"))  || [];
 var timeout = 300;
 var zoomOn = false;
-var dataPoints = 2000;
-let floods_large = [];
+var dataPoints = 2413;
+
 
 // Fetching data from mongoDB with AJAX
 
@@ -95,13 +95,14 @@ setTimeout(function(){
     source: new ol.source.OSM(),
     crossOrigin: ''
   });
-
+// Azores -25.506134 , 37.794594
+// Tuy Hoa 109.3209381, 13.0954599
   var map = new ol.Map({
-    layers: [ raster, markerLayer ],
+    layers: [ raster, heatmapLayer ],
     target: 'map',
     view: new ol.View({
-      center: ol.proj.fromLonLat([28.979530 ,41.015137 ]),
-      zoom: 0
+      center: ol.proj.fromLonLat([109.3209381 ,13.0954599]),
+      zoom: 3
     })
   });
 // Initial render
@@ -119,6 +120,7 @@ function zoom_time(on){
 
     zoom_data.push(Math.round(completed_zoom));
     localStorage.setItem("scrapedZoomData", JSON.stringify(zoom_data));
+    console.log(zoom_data.length);
     
     localStorage.removeItem('zoom_start');        
     document.getElementById('zoom_data').innerHTML =  zoom_data.join(", <br> ");
@@ -129,14 +131,29 @@ function zoom_time(on){
   }
 });
 }
-
-$(".ol-zoom-in").add(".ol-zoom-out").click(function() {
-
-  console.log('Clicked');
+//Code for measuring only on zoom in 
+$(".ol-zoom-in").click(function() {
+  zoomOn = true;
   var zoom_start = Date.now();
   localStorage.setItem("zoom_start", zoom_start);
-  zoomOn = true;
+
 });
+$(".ol-zoom-out").click(function() {
+  zoomOn = false;
+});
+
+/*
+ //Code for measuring only on zoom out 
+$(".ol-zoom-out").click(function() {
+  zoomOn = true;
+  var zoom_start = Date.now();
+  localStorage.setItem("zoom_start", zoom_start);
+
+});
+$(".ol-zoom-in").click(function() {
+  zoomOn = false;
+});
+*/
 
 map.on('moveend', function(){  
     zoom_time(zoomOn);

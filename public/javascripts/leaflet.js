@@ -1,23 +1,23 @@
 let array_data = JSON.parse(localStorage.getItem("scrapedData")) || [];
 let tile_data = JSON.parse(localStorage.getItem("scrapedTileData")) || [];
-let dataPoints = 2000;
-let floods_large = [];
+var dataPoints = 2413;
+var floods_large = [];
+var zoomOn = false;
 
-// Fetching data from mongoDB with AJAX
-        $.ajax({
-            url: "http://localhost:3000/data",
-            type: 'GET',
-            dataType: 'json', // added data type
-            beforeSend: function () {
-                // get time before GET
-                let get_time = Date.now();
-                localStorage.setItem("get_time", get_time);
-            }, success: function (res) {
-                generateMarkers(res);
-                generateHeatmap(res);
+$.ajax({
+    url: "http://localhost:3000/data",
+    type: 'GET',
+    dataType: 'json', // added data type
+    beforeSend: function () {
+        // get time before GET
+        let get_time = Date.now();
+        localStorage.setItem("get_time", get_time);
+    }, success: function (res) {
+        generateMarkers(res);
+        generateHeatmap(res);  
+    }
+});
 
-            }
-        });
 
 var markers = L.layerGroup();
 var coordsData = {
@@ -60,18 +60,16 @@ function print_time(end_time) {
         document.getElementById('fab-btn').innerHTML = array_data.length;
 }
 
-function generateHeatmap(floods) {
-    for (var j = 0; j < floods.length; j++) {
-        heatmapObj[j] = { lat: floods[j].lat, lng: floods[j].long }
-        coordsData.data.push(heatmapObj[j]);
-    }
+function generateHeatmap(floods) {    
+        for (var j = 0; j < floods.length; j++) {
+            heatmapObj[j] = { lat: floods[j].lat, lng: floods[j].long }
+            coordsData.data.push(heatmapObj[j]);
+        }
+    
         heatmapLayer.setData(coordsData);
         var end_time = Date.now();
         print_time(end_time);
-
-
 }
-
 
 function generateMarkers(flood) {
     for (var j = 0; j < flood.length; j++) {
@@ -85,7 +83,6 @@ function generateMarkers(flood) {
     }
         var end_time = Date.now();
         print_time(end_time);
-
 }
 
 // Azores 37.794594, -25.506134
@@ -94,28 +91,38 @@ function generateMarkers(flood) {
 var map = L.map('mapid', {
     center: [13.0954599, 109.3209381],
     zoom: 3,
-    layers: [markers]
+    layers: [heatmapLayer]
 });
-
 var tile_layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 }).addTo(map);
-
-$(".leaflet-control-zoom-in").add(".leaflet-control-zoom-out").click(function () {
+/* Code for measuring only on zoom in 
+$(".leaflet-control-zoom-out").click(function () {
+    zoomOn = false;
+});
+$(".leaflet-control-zoom-in").click(function () {
     var tile_start = Date.now();
     localStorage.setItem("tile_start", tile_start);
+    zoomOn = true;
 });
-
+*/
+// Code for measuring only on zoom in 
+$(".leaflet-control-zoom-in").click(function () {
+    zoomOn = false;
+});
+$(".leaflet-control-zoom-out").click(function () {
+    var tile_start = Date.now();
+    localStorage.setItem("tile_start", tile_start);
+    zoomOn = true;
+});
 tile_layer.on("load", function () {
-    if (localStorage.getItem("tile_start") != null) {
+    if (localStorage.getItem("tile_start") != null && zoomOn == true) {
         var tile_end = Date.now();
         var stored_time = localStorage.getItem("tile_start");
         var completed_tile = (tile_end - stored_time);
 
         tile_data.push(Math.round(completed_tile));
         localStorage.setItem("scrapedTileData", JSON.stringify(tile_data));
-
-        console.log(tile_data);
 
         localStorage.removeItem('tile_start');
         document.getElementById('tile_data').innerHTML = tile_data.join(" <br> ");
@@ -125,6 +132,7 @@ tile_layer.on("load", function () {
         localStorage.removeItem('tile_start');
     }
 });
+
 
 var overlayMaps = {
     "Heatmap": heatmapLayer,
